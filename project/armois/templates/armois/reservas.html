@@ -1,0 +1,31 @@
+{% extends 'armois/layout.html' %}
+{% load static %}
+{% block title %}
+  <title>Reservas Médicas</title>
+{% endblock %}
+
+{% block content %}
+  <form id="agendarForm">
+    <label for="profesional">Profesional:</label>
+    <select id="profesional">
+      {% for profesional in profesionales %}
+        <option value="{{ profesional.id }}">{{ profesional.nombre }}</option>
+      {% endfor %}
+    </select>
+    <br />
+    <label for="especialidad">Especialidad:</label>
+    <select id="especialidad">
+      {% for especialidad in especialidades %}
+        <option value="{{ especialidad.id }}">{{ especialidad.nombre }}</option>
+      {% endfor %}
+    </select>
+    <br />
+    <label for="subespecialidad">Subespecialidad:</label>
+    <select id="subespecialidad" name="subespecialidad">
+      <option value="seleccione" readonly>Seleccione...</option>
+    </select>
+    <br />
+    <!-- Otros campos del formulario para la cita -->
+    <input type="submit" value="Agendar" />
+  </form>
+{% endblock %}

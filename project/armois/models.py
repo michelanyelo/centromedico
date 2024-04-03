@@ -23,19 +23,19 @@ class Subespecialidad(models.Model):
 
     def __str__(self):
         return self.nombre
-    
 
 
 class Profesional(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, null=True, blank=True)
     nombre = models.CharField(max_length=100)
     especialidad = models.ForeignKey(Especialidad, on_delete=models.CASCADE)
+    subespecialidad = models.ForeignKey(Subespecialidad, on_delete=models.CASCADE, null=True, blank=True)
     descripcion = models.TextField()
     telefono = models.CharField(max_length=15)
     correo = models.EmailField()
 
     def __str__(self):
-        return self.nombre
+        return f"{self.nombre} especializado en {self.especialidad}"
 
 
 class Paciente(models.Model):

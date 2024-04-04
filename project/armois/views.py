@@ -29,24 +29,59 @@ def detalle_especialidad(request, especialidad_id):
     )
 
 
+def get_especialidad(request):
+    especialidad = list(Especialidad.objects.values())
+    if len(especialidad) > 0:
+        data = {"message": "Success", "especialidad": especialidad}
+    else:
+        data = {"message": "Not found esp"}
+
+    return JsonResponse(data)
+
+
+def get_subesp(request, especialidad_id):
+    sub_esp = list(
+        Subespecialidad.objects.filter(especialidad_id=especialidad_id).values()
+    )
+    if len(sub_esp) > 0:
+        data = {"message": "Success", "subespecialidad": sub_esp}
+    else:
+        data = {"message": "Not found subesp"}
+
+    return JsonResponse(data)
+
+
+def get_prof_subesp(request, subespecialidad_id):
+    profesional_subesp = list(
+        Profesional.objects.filter(subespecialidad_id=subespecialidad_id).values()
+    )
+
+    if len(profesional_subesp) > 0:
+        data = {"message": "Success", "profesional_subesp": profesional_subesp}
+    else:
+        data = {"message": "Not found profesional con subesp"}
+
+    return JsonResponse(data)
+
+
+def get_prof_sin_subesp(request, especialidad_id):
+    profesionales_sin_subesp = Profesional.objects.filter(
+        subespecialidad__isnull=True, especialidad_id=especialidad_id
+    )
+
+    if profesionales_sin_subesp.exists():
+        data = {
+            "message": "Success",
+            "profesionales_sin_subesp": list(profesionales_sin_subesp.values()),
+        }
+    else:
+        data = {"message": "Not found profesional sin subesp"}
+
+    return JsonResponse(data)
+
+
 def reservas(request):
-    profesionales = Profesional.objects.all()
-    especialidades = Especialidad.objects.all()
-    return render(
-        request,
-        "armois/reservas.html",
-        {"especialidades": especialidades, "profesionales": profesionales},
-    )
-
-
-def obtener_subespecialidades(request):
-    especialidad_id = request.GET.get(
-        "especialidad_id"
-    )
-    subespecialidades = Subespecialidad.objects.filter(
-        especialidad_id=especialidad_id
-    ).values()
-    return JsonResponse(list(subespecialidades), safe=False)
+    return render(request, "armois/reservas.html")
 
 
 def agendar_cita(request):

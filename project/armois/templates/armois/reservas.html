@@ -6,25 +6,15 @@
 
 {% block content %}
   <form id="agendarForm">
-    <label for="profesional">Profesional:</label>
-    <select id="profesional">
-      {% for profesional in profesionales %}
-        <option value="{{ profesional.id }}">{{ profesional.nombre }}</option>
-      {% endfor %}
-    </select>
-    <br />
-    <label for="especialidad">Especialidad:</label>
-    <select id="especialidad">
-      {% for especialidad in especialidades %}
-        <option value="{{ especialidad.id }}">{{ especialidad.nombre }}</option>
-      {% endfor %}
-    </select>
-    <br />
-    <label for="subespecialidad">Subespecialidad:</label>
-    <select id="subespecialidad" name="subespecialidad">
-      <option value="seleccione" readonly>Seleccione...</option>
-    </select>
-    <br />
+    <label for="cboEspecialidad">Especialidad:</label>
+    <select id="cboEspecialidad"></select>
+
+    <label for="cboSubEspecialidad">Subespecialidad:</label>
+    <select id="cboSubEspecialidad"></select>
+
+    <label for="cboProfesional">Profesional:</label>
+    <select id="cboProfesional"></select>
+
     <!-- Otros campos del formulario para la cita -->
     <input type="submit" value="Agendar" />
   </form>

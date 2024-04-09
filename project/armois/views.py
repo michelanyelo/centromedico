@@ -1,9 +1,13 @@
 from django.http import JsonResponse
 from django.shortcuts import render
-from .models import Especialidad, Subespecialidad, Profesional
+from .models import Especialidad, Subespecialidad, Profesional, HorarioAtencion
+from googlecalendar import google_calendar_class as gc
+from datetime import datetime
 
 
 # Create your views here.
+
+
 def index(request):
     return render(request, "armois/layout.html")
 
@@ -41,7 +45,8 @@ def get_especialidad(request):
 
 def get_subesp(request, especialidad_id):
     sub_esp = list(
-        Subespecialidad.objects.filter(especialidad_id=especialidad_id).values()
+        Subespecialidad.objects.filter(
+            especialidad_id=especialidad_id).values()
     )
     if len(sub_esp) > 0:
         data = {"message": "Success", "subespecialidad": sub_esp}
@@ -51,9 +56,10 @@ def get_subesp(request, especialidad_id):
     return JsonResponse(data)
 
 
-def get_prof_subesp(request, subespecialidad_id):
+def get_prof_con_subesp(request, subespecialidad_id):
     profesional_subesp = list(
-        Profesional.objects.filter(subespecialidad_id=subespecialidad_id).values()
+        Profesional.objects.filter(
+            subespecialidad_id=subespecialidad_id).values()
     )
 
     if len(profesional_subesp) > 0:
@@ -80,15 +86,114 @@ def get_prof_sin_subesp(request, especialidad_id):
     return JsonResponse(data)
 
 
-def reservas(request):
-    return render(request, "armois/reservas.html")
-
-
-def agendar_cita(request):
-    if request.method == "POST":
-        # Aquí procesa el formulario de agendamiento y guarda la cita en la base de datos
-        # Podrías utilizar el modelo de cita y los datos enviados en el formulario para crear una nueva cita
-        # Luego, redirige a una página de confirmación o muestra un mensaje de éxito
-        pass
+def get_horarios_disponibles(request, profesional_id):
+    horarios = HorarioAtencion.objects.filter(profesional_id=profesional_id)
+    if horarios.exists():
+        data = {
+            "message": "Success",
+            "horarios": list(horarios.values())
+        }
     else:
-        return render(request, "armois/reservas.html", {})
+        data = {"message": "No hay horarios disponibles"}
+    return JsonResponse(data)
+
+
+def reservas(request):
+    if request.method == 'POST':
+        # summary = "Psicología(Psicología Infanto Juvenil) - Camila Maulén"
+        id_profesional = request.POST.get('cboProfesional')
+        nombre_profesional = Profesional.objects.get(id=id_profesional).nombre
+        dia = request.POST.get('dia')
+        mes_numero = request.POST.get('mes')
+        anio = request.POST.get('anio')
+        hora_inicio = request.POST.get('hora_inicio')
+        hora_fin = request.POST.get('hora_fin')
+        # Mapeo de números de meses a nombres
+        meses = {
+            '01': 'Enero',
+            '02': 'Febrero',
+            '03': 'Marzo',
+            '04': 'Abril',
+            '05': 'Mayo',
+            '06': 'Junio',
+            '07': 'Julio',
+            '08': 'Agosto',
+            '09': 'Septiembre',
+            '10': 'Octubre',
+            '11': 'Noviembre',
+            '12': 'Diciembre'
+        }
+
+        # Transformar el número del mes en nombre
+        mes_nombre = meses.get(mes_numero, '')
+
+        fecha_hora_inicio = f"{anio}-{mes_numero}-{dia}-T{hora_inicio}"
+        fecha_hora_final = f"{anio}-{mes_numero}-{dia}-T{hora_fin}"
+
+        return render(request, "armois/solicitar_datos_paciente.html/", {
+            "id_profesional": id_profesional,
+            "nombre_profesional": nombre_profesional,
+            "dia": dia,
+            "mes_numero": mes_numero,
+            "mes_nombre": mes_nombre,
+            "anio": anio,
+            "hora_inicio": hora_inicio,
+            "hora_fin": hora_fin,
+            "fecha_hora_inicio": fecha_hora_inicio,
+            "fecha_hora_final": fecha_hora_final
+        })
+    else:
+        # Renderizar el formulario de selección de horario
+        return render(request, "armois/reservas.html")
+
+
+def reservas_a_calendario(request):
+    if request.method == 'POST':
+        # Obtener los datos del paciente
+        nombre_paciente = request.POST.get('inputNombrePaciente')
+        correo_paciente = request.POST.get('inputCorreoPaciente')
+        sexo_paciente = request.POST.get('radioSexo')
+        direccion_paciente = request.POST.get('inputDireccion')
+        telefono_paciente = request.POST.get('inputTelefono')
+
+        # Obtener los datos del profesional
+        profesional_id = request.POST.get('id_profesional')
+        nombre_profesional = request.POST.get('nombre_profesional')
+        fecha_hora_inicio_str = request.POST.get('fecha_hora_inicio')
+        fecha_hora_inicio_str = fecha_hora_inicio_str.replace('-T', 'T')
+        fecha_hora_inicio = datetime.strptime(fecha_hora_inicio_str, '%Y-%m-%dT%H:%M:%S')
+        hora_inicio = fecha_hora_inicio.strftime('%Y-%m-%dT%H:%M:%S')
+
+        fecha_hora_final_str = request.POST.get('fecha_hora_final')
+        fecha_hora_final_str = fecha_hora_final_str.replace('-T', 'T')
+        fecha_hora_final = datetime.strptime(fecha_hora_final_str, '%Y-%m-%dT%H:%M:%S')
+        hora_final = fecha_hora_final.strftime('%Y-%m-%dT%H:%M:%S')
+
+        # Lógica para agregar el evento al calendario con los datos del paciente y profesional
+        especialidad_profesional = Profesional.objects.get(
+            id=profesional_id).especialidad
+        subespecialidad_profesional = Profesional.objects.get(
+            id=profesional_id).subespecialidad
+        correo_profesional = Profesional.objects.get(id=profesional_id).correo
+        if subespecialidad_profesional is not None:
+            summary = f"{nombre_profesional} ({subespecialidad_profesional}) \nAtención a: {nombre_paciente}"
+        else:
+            summary = f"{nombre_profesional} \n{especialidad_profesional} \nAtención a: {nombre_paciente}"
+        timezone = "America/Santiago"
+        attendees = [correo_profesional, correo_paciente]
+
+        # Crear una instancia de GoogleCalendarManager y llamar a create_event
+
+        calendar_manager = gc.GoogleCalendarManager()
+        calendar_manager.create_event(str(summary),
+                                      str(hora_inicio),
+                                      str(hora_final),
+                                      timezone,
+                                      attendees)
+
+        # Redirigir a una página de éxito o renderizar una plantilla de éxito
+        return render(request, 'armois/reservas.html')
+
+    else:
+        # Si no es un método POST, redirigir a la página de reserva
+        return render(request, "armois/solicitar_datos_paciente.html/")

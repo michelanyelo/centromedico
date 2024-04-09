@@ -1,0 +1,64 @@
+{% extends 'armois/layout.html' %}
+{% load static %}
+{% block title %}
+  <title>Reservas Médicas</title>
+{% endblock %}
+
+{% block content %}
+  <form id="datosPacienteForm" class="formulario-reserva mt-5" method="post" action="{% url 'reservas_a_calendario' %}">
+    {% csrf_token %}
+    <fieldset>
+      <legend class="legend-profesional">Ingresa tus datos para atenderte con {{ nombre_profesional }}</legend>
+      <legend class="legend-datos">El día {{ dia }} de {{ mes_nombre }}, a partir de las {{ hora_inicio }} hasta las {{ hora_fin }}</legend>
+      {% comment %} <div class="mb-3">
+        <label for="inputRutPaciente" class="form-label">Rut:</label>
+        <input class="form-control" type="text" id="inputRutPaciente" />
+      </div> {% endcomment %}
+      <div class="mb-3">
+        <label for="inputNombrePaciente" class="form-label">Nombre completo:</label>
+        <input class="form-control" type="text" id="inputNombrePaciente" name="inputNombrePaciente" />
+      </div>
+      <div class="mb-3">
+        <label for="inputCorreoPaciente">Correo electrónico:</label>
+        <input id="inputCorreoPaciente" name="inputCorreoPaciente" class="form-control" type="email" />
+      </div>
+      <div class="mb-3">
+        <label for="radioSexo">Sexo:</label>
+        <div class="form-check">
+          <input class="form-check-input" type="radio" name="radioSexo" id="sexoMasculino" />
+          <label class="form-check-label" for="sexoMasculino">Masculino</label>
+        </div>
+        <div class="form-check">
+          <input class="form-check-input" type="radio" name="radioSexo" id="sexoFemenino" />
+          <label class="form-check-label" for="sexoFemenino">Femenino</label>
+        </div>
+        <div class="form-check">
+          <input class="form-check-input" type="radio" name="radioSexo" id="sexoNoBinario" />
+          <label class="form-check-label" for="sexoNoBinario">No binario/a/e</label>
+        </div>
+        <div class="form-check">
+          <input class="form-check-input" type="radio" name="radioSexo" id="sexoOtro" />
+          <label class="form-check-label" for="sexoOtro">Prefiero no especificar</label>
+        </div>
+      </div>
+      <div class="mb-3">
+        <label for="inputDireccion">Dirección:</label>
+        <input id="inputDireccion" name="inputDireccion" class="form-control" type="text" />
+      </div>
+      <div class="mb-3">
+        <label for="inputTelefono">Teléfono/Celular:</label>
+        <input id="inputTelefono" name="inputTelefono" class="form-control" type="text" />
+      </div>
+
+
+      <input type="hidden" id="fecha_hora_inicio" name="fecha_hora_inicio" value="{{ fecha_hora_inicio }}" />
+      <input type="hidden" id="fecha_hora_final" name="fecha_hora_final" value="{{ fecha_hora_final }}" />
+      <input type="hidden" id="id_profesional" name="id_profesional" value="{{ id_profesional }}" />
+      <input type="hidden" id="nombre_profesional" name="nombre_profesional" value="{{ nombre_profesional }}" />
+
+
+      <button type="submit" class="btn btn-primary" value="agendar_paciente">Agendar</button>
+    </fieldset>
+  </form>
+  {% comment %}javascript validar formato rut{% endcomment %}
+{% endblock %}

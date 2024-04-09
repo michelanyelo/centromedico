@@ -5,17 +5,37 @@
 {% endblock %}
 
 {% block content %}
-  <form id="agendarForm">
-    <label for="cboEspecialidad">Especialidad:</label>
-    <select id="cboEspecialidad"></select>
+  <form id="agendarForm" class="formulario-reserva mt-5" method="post" action="{% url 'solicitar_datos_paciente' %}" novalidate>
+    {% csrf_token %}
+    <fieldset>
+      <legend class="legend-titulo">¡Reserva tu hora con nosotras/os!</legend>
+      <div class="mb-3">
+        <label for="cboEspecialidad" class="form-label">Especialidad:</label>
+        <select id="cboEspecialidad" class="form-select" aria-label="Especialidad Select" required></select>
+      </div>
+      <div class="mb-3">
+        <label for="cboSubespecialidad" id="subespecialidadLabel">Subespecialidad:</label>
+        <select id="cboSubEspecialidad" class="form-select" aria-label="Subspecialidad Select"></select>
+      </div>
+      <div class="mb-3">
+        <label for="cboProfesional" id="profesionalLabel">Profesional:</label>
+        <select id="cboProfesional" class="form-select" aria-label="Profesional Select" name="cboProfesional" required></select>
+      </div>
+      <!-- Otros campos del formulario para la cita -->
+      <div class="mb-3">
+        <label for="cboHorario" id="horarioLabel">Horario:</label>
+        <select id="cboHorario" class="form-select" aria-label="Horario Select" name="horario" required></select>
+      </div>
 
-    <label for="cboSubEspecialidad">Subespecialidad:</label>
-    <select id="cboSubEspecialidad"></select>
+      <input type="hidden" id="dia" name="dia" value="" />
+      <input type="hidden" id="mes" name="mes" value="" />
+      <input type="hidden" id="anio" name="anio" value="" />
+      <input type="hidden" id="hora_inicio" name="hora_inicio" value="" />
+      <input type="hidden" id="hora_fin" name="hora_fin" value="" />
 
-    <label for="cboProfesional">Profesional:</label>
-    <select id="cboProfesional"></select>
-
-    <!-- Otros campos del formulario para la cita -->
-    <input type="submit" value="Agendar" />
+      <button type="submit" class="btn btn-primary" value="agendar_profesional">Ir a datos personales</button>
+    </fieldset>
   </form>
+
+  <script src="{% static 'armois/reservas.js' %}"></script>
 {% endblock %}

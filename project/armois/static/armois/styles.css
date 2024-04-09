@@ -116,3 +116,35 @@ footer .nav-item {
     height: 100%;
     width: 100%;
 } */
+
+.formulario-reserva {
+    /* Estilos específicos para el formulario de reserva de cita médica */
+    background-color: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+legend {
+    font-size: 1.2em;
+    /* Tamaño de fuente */
+    font-weight: bold;
+    /* Negrita */
+    color: #333;
+    /* Color del texto */
+    margin-bottom: 10px;
+    /* Margen inferior para separación */
+}
+
+.legend-titulo,
+.legend-profesional {
+    font-style: italic;
+    /* Estilo de fuente en cursiva */
+}
+
+.legend-datos {
+    font-size: 0.9em;
+    /* Tamaño de fuente más pequeño */
+    color: #666;
+    /* Color de texto más claro */
+}

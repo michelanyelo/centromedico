@@ -4,10 +4,8 @@ from django.core.exceptions import ValidationError
 from django.utils import timezone
 
 
-class User(AbstractUser):
-    # Puedes agregar campos adicionales si es necesario
-    pass
-
+class CustomUser(AbstractUser):
+    is_secretaria = models.BooleanField(default=False)
 
 class Especialidad(models.Model):
     nombre = models.CharField(max_length=100, unique=True)
@@ -28,12 +26,10 @@ class Subespecialidad(models.Model):
 
 
 class Profesional(models.Model):
-    user = models.OneToOneField(
-        User, on_delete=models.CASCADE, null=True, blank=True)
+    user = models.OneToOneField(CustomUser, on_delete=models.CASCADE, null=True, blank=True)
     nombre = models.CharField(max_length=100)
     especialidad = models.ForeignKey(Especialidad, on_delete=models.CASCADE)
-    subespecialidad = models.ForeignKey(
-        Subespecialidad, on_delete=models.CASCADE, null=True, blank=True)
+    subespecialidad = models.ForeignKey(Subespecialidad, on_delete=models.CASCADE, null=True, blank=True)
     descripcion = models.TextField()
     telefono = models.CharField(max_length=15)
     correo = models.EmailField()
@@ -45,9 +41,9 @@ class Profesional(models.Model):
             return f"{self.nombre} especializado en {self.especialidad}"
 
 
+
 class Paciente(models.Model):
-    user = models.OneToOneField(
-        User, on_delete=models.CASCADE, null=True, blank=True)
+    user = models.OneToOneField(CustomUser, on_delete=models.CASCADE, null=True, blank=True)
     nombre = models.CharField(max_length=100)
     rut = models.CharField(max_length=12)
     telefono = models.CharField(max_length=15)
@@ -59,7 +55,7 @@ class Paciente(models.Model):
 
 class HorarioAtencion(models.Model):
     profesional = models.ForeignKey(Profesional, on_delete=models.CASCADE)
-    fecha = models.DateField()  # Campo para almacenar la fecha
+    fecha = models.DateField()
     hora_inicio = models.TimeField()
     hora_fin = models.TimeField()
 
@@ -69,8 +65,7 @@ class HorarioAtencion(models.Model):
     def clean(self):
         # Validar que la hora de inicio sea anterior a la hora de finalización
         if self.hora_inicio >= self.hora_fin:
-            raise ValidationError(
-                "La hora de inicio debe ser anterior a la hora de finalización.")
+            raise ValidationError("La hora de inicio debe ser anterior a la hora de finalización.")
 
         # Verificar si ya existe un horario de atención para el mismo profesional, día y horario
         existentes = HorarioAtencion.objects.filter(
@@ -80,8 +75,7 @@ class HorarioAtencion(models.Model):
             hora_fin__gte=self.hora_inicio
         )
         if existentes.exists():
-            raise ValidationError(f"Ya existe un horario de atención para {
-                                  self.profesional.nombre} el día {self.fecha} de {self.hora_inicio} a {self.hora_fin}.")
+            raise ValidationError(f"Ya existe un horario de atención para {self.profesional.nombre} el día {self.fecha} de {self.hora_inicio} a {self.hora_fin}.")
 
     @classmethod
     def is_hora_disponible(cls, profesional, fecha, hora_inicio, hora_fin):

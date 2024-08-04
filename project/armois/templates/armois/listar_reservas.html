@@ -1,0 +1,30 @@
+{% extends 'armois/layout.html' %}
+{% block title %}
+  <title>Lista de Reservas</title>
+{% endblock %}
+
+{% block content %}
+  <div class="container mt-5">
+    <h1 class="mb-4">Lista de Reservas</h1>
+    <table class="table table-bordered">
+      <thead>
+        <tr>
+          <th>Resumen</th>
+          <th>Inicio</th>
+          <th>Fin</th>
+          <th>Zona Horaria</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for event in events %}
+          <tr>
+            <td>{{ event.summary }}</td>
+            <td>{{ event.start.dateTime}}</td>
+            <td>{{ event.end.dateTime}}</td>
+            <td>{{ event.start.timeZone }}</td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+{% endblock %}

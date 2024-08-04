@@ -1,10 +1,14 @@
 from django.shortcuts import render
-from django.http import JsonResponse
+from django.http import HttpResponseRedirect, JsonResponse
 from django.shortcuts import redirect, render
+from django.urls import reverse
 from .models import Especialidad, Subespecialidad, Profesional, HorarioAtencion
 from googlecalendar import google_calendar_class as gc
-from datetime import datetime
-from googlecalendar.google_calendar_class import GoogleCalendarManager
+from datetime import datetime, timedelta, timezone
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth import authenticate, login, logout
+
+# from googlecalendar.google_calendar_class import GoogleCalendarManager
 
 
 # Create your views here.
@@ -12,6 +16,30 @@ from googlecalendar.google_calendar_class import GoogleCalendarManager
 
 def index(request):
     return render(request, "armois/layout.html")
+
+
+def login_view(request):
+    if request.method == "POST":
+        # Attempt to sign user in
+        username = request.POST["username"]
+        password = request.POST["password"]
+        user = authenticate(request, username=username, password=password)
+
+        # Check if authentication successful
+        if user is not None:
+            login(request, user)
+            return HttpResponseRedirect(reverse("profile", args=[user.id]))
+        else:
+            return render(request, "armois/login.html", {
+                "message": "Invalid username and/or password."
+            })
+    else:
+        return render(request, "armois/login.html")
+
+
+def logout_view(request):
+    logout(request)
+    return HttpResponseRedirect(reverse("template"))
 
 
 # specialty tab
@@ -207,7 +235,28 @@ def reservas_a_calendario(request):
         return render(request, "armois/solicitar_datos_paciente.html/")
 
 
+# def listar_incoming_reservas(request):
+#     calendar_manager = gc.GoogleCalendarManager()
+#     events = calendar_manager.list_upcoming_events()
+#     return render(request, 'armois/listar_reservas.html', {'events': events})
+
+@login_required
 def listar_reservas(request):
-    calendar_manager = GoogleCalendarManager()
-    events = calendar_manager.list_upcoming_events()
-    return render(request, 'armois/listar_reservas.html', {'events': events})
+    if request.user.is_secretaria:
+        calendar_manager = gc.GoogleCalendarManager()
+        start_date = datetime.now(timezone.utc) - timedelta(days=30)
+        end_date = datetime.now(timezone.utc) + timedelta(days=30)
+        events = calendar_manager.list_events_in_date_range(
+            start_date, end_date)
+
+        for event in events:
+            if 'dateTime' in event['start']:
+                event['start']['dateTime'] = datetime.strptime(
+                    event['start']['dateTime'], '%Y-%m-%dT%H:%M:%S%z')
+            if 'dateTime' in event['end']:
+                event['end']['dateTime'] = datetime.strptime(
+                    event['end']['dateTime'], '%Y-%m-%dT%H:%M:%S%z')
+
+        return render(request, 'armois/listar_reservas.html', {'events': events})
+    else:
+        return redirect('armois/layout')

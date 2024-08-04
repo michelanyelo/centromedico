@@ -1,5 +1,6 @@
 :root {
-    --gdark: #076054;
+    --default: #fff;
+    --success: #26a69a;
     --reservabtn: #f92880;
     --reservabtnhv: #F06F9E;
     --reservabtnhv-antiguo: #f08cb1;
@@ -7,6 +8,8 @@
     --card-background: #f9b6cf;
     --card-highlight: #43192e;
     --subtitulos: #00C3CD;
+    --lightText: #959595;
+   
     /* --background-somos: #f9b6cf; same as  card-background*/
 }
 
@@ -15,17 +18,18 @@
         margin-top: 20px;
     }
 
-    #somos{
+    #somos {
         margin-top: 40px;
     }
 
-    #modalidades{
+    #modalidades {
         padding-bottom: 20px;
     }
 
-    #profesionales{
+    #profesionales {
         margin: 40px 0;
     }
+
     #profesionales .card {
         margin-bottom: 40px;
     }
@@ -89,7 +93,7 @@ body {
 }
 
 nav {
-    background-color: var(--gdark);
+    background-color: var(--success);
     padding: 10px 0;
 }
 
@@ -109,7 +113,7 @@ footer .nav-link:hover {
 }
 
 footer {
-    background-color: var(--gdark);
+    background-color: var(--success);
     padding: 20px 0;
     text-align: center;
     width: 100%;
@@ -133,15 +137,15 @@ footer .nav-item {
     text-align: center;
     position: relative;
     text-decoration: none;
-    color: var(--gdark);
+    color: var(--success);
     background-color: #fff;
-    border: 1px solid var(--gdark);
+    border: 1px solid var(--success);
     border-radius: 3px;
 }
 
 .letra-btn:hover {
     background-color: rgb(240, 240, 240);
-    border: 1px solid var(--gdark);
+    border: 1px solid var(--success);
 }
 
 .especialidades-container {
@@ -157,7 +161,7 @@ footer .nav-item {
     font-size: 28px;
     color: #ffffff;
     padding: 10px;
-    background-color: var(--gdark);
+    background-color: var(--success);
     margin-top: 40px;
     border-radius: 5px;
 }
@@ -397,4 +401,150 @@ legend {
 
 .profesion-titulo p {
     font-size: 13px;
+}
+
+/* LOGIN REGISTER FORM */
+
+.blmd-wrapp {
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
+    border-radius: 3px;
+    height: auto;
+    margin-top: 10vh;
+    background: var(--default);
+    padding: 1em 0;
+    position: relative;
+    transition: height 0.5s;
+}
+
+.blmd-header-wrapp {
+    clear: both;
+    position: relative;
+}
+
+.blmd-switches {
+    position: relative;
+    z-index: 3;
+}
+
+.blmd-switches>button {
+    position: absolute;
+    right: -30px;
+    top: 35px;
+    transition: all 1s;
+    background-color: var(--success);
+    border-color: var(--success);
+}
+
+.blmd-switches>button.active {
+    right: 50%;
+    top: -45px;
+    margin-right: -32px;
+    background-color: var(--reservabtn);
+    border-color: var(--reservabtn);
+    transform: rotate(90deg);
+    transition: all 0.5s;
+}
+
+.blmd-continer {
+    padding: 15px;
+    height: auto;
+    overflow: hidden;
+}
+
+.blmd-continer form {
+    max-height: auto;
+    transition: all 0.5s;
+}
+
+.blmd-continer form.form-hidden {
+    max-height: 0;
+    overflow: hidden;
+    margin: 0;
+    transition: all 0.5s;
+}
+
+#login-form>h1 {
+    border-left: 5px solid var(--success);
+}
+
+#Register-form>h1 {
+    border-left: 5px solid var(--reservabtn);
+    color: var(--text);
+}
+
+#login-form .btn-success{
+    background-color: var(--success);
+    border-color: var(--success);
+}
+
+#Register-form .btn-warning{
+    background-color: var(--reservabtnhv);
+    border-color: var(--reservabtnhv);
+    color: var(--default);
+}
+
+.blmd-form {
+    margin: 3rem 0;
+    position: relative;
+    width: 100%;
+}
+
+.input-group-addon {
+    border-width: 0 0 1px;
+    min-width: 42px;
+    padding: 6px 12px;
+    font-size: 13px;
+    font-weight: 400;
+    line-height: 1;
+    color: var(--text);
+    text-align: center;
+    background-color: transparent;
+    border: 1px solid transparent;
+    border-radius: 0;
+}
+
+.blmd-line {
+    display: inline-block;
+    width: 100%;
+    position: relative;
+    vertical-align: top;
+}
+
+.blmd-line.blmd-toggled:after {
+    transform: scale(1);
+}
+
+.blmd-line:after {
+    transform: scale(0);
+    background: var(--success);
+    position: absolute;
+    z-index: 3;
+    bottom: 0;
+    left: 0;
+    height: 2px;
+    width: 100%;
+    content: '';
+    transition: all 0.3s;
+}
+
+.form-control {
+    box-shadow: none;
+    border-radius: 0;
+    background: 0 0;
+    border: none;
+    padding: 0;
+}
+
+.blmd-label {
+    transition: all 0.2s;
+    position: absolute;
+    top: 5px;
+    font-weight: 400;
+    color: var(--lightText);
+    pointer-events: none;
+    z-index: 0;
+    left: 0;
+    white-space: nowrap;
+
+
 }

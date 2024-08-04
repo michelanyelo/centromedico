@@ -81,7 +81,7 @@ DATABASES = {
     }
 }
 
-AUTH_USER_MODEL = 'armois.User'
+AUTH_USER_MODEL = 'armois.CustomUser'
 
 
 # Password validation

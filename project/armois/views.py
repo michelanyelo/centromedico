@@ -30,11 +30,11 @@ def login_view(request):
             login(request, user)
             return HttpResponseRedirect(reverse("profile", args=[user.id]))
         else:
-            return render(request, "armois/login.html", {
+            return render(request, "armois/profesional_login.html", {
                 "message": "Invalid username and/or password."
             })
     else:
-        return render(request, "armois/login.html")
+        return render(request, "armois/profesional_login.html")
 
 
 def logout_view(request):

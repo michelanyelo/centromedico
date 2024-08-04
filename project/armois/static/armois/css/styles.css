@@ -431,16 +431,16 @@ legend {
     right: -30px;
     top: 35px;
     transition: all 1s;
-    background-color: var(--success);
-    border-color: var(--success);
+    background-color: var(--reservabtn);
+    border-color: var(--reservabtn);
 }
 
 .blmd-switches>button.active {
     right: 50%;
     top: -45px;
     margin-right: -32px;
-    background-color: var(--reservabtn);
-    border-color: var(--reservabtn);
+    background-color: var(--success);
+    border-color: var(--success);
     transform: rotate(90deg);
     transition: all 0.5s;
 }

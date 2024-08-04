@@ -3,7 +3,7 @@ from . import views
 
 urlpatterns = [
     path("", views.index, name="index"),
-    path("login", views.login_view, name="login"),
+    path('login/', views.login_view, name='login'),
     path("especialidades", views.especialidad, name="especialidades"),
     path("detalle_especialidad/<str:especialidad_id>", views.detalle_especialidad, name="detalle_especialidad"),
     path("reservas/especialidades", views.get_especialidad, name="get_especialidad"),
@@ -15,4 +15,6 @@ urlpatterns = [
     path("reservas/solicitar-datos-paciente/", views.reservas, name="solicitar_datos_paciente"),
     path("reservas/reservas-a-calendario/", views.reservas_a_calendario, name="reservas_a_calendario"),
     path('reservas/listar/', views.listar_reservas, name='listar_reservas'),
+    path('dashboard/', views.dashboard, name='dashboard'),
+    
 ]

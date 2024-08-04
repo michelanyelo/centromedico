@@ -18,20 +18,25 @@ def index(request):
     return render(request, "armois/index.html")
 
 
+def dashboard(request):
+    return render(request, "armois/dashboard.html")
+
+
 def login_view(request):
     if request.method == "POST":
-        # Attempt to sign user in
-        username = request.POST["username"]
-        password = request.POST["password"]
+        username = request.POST.get("username")
+        password = request.POST.get("password")
         user = authenticate(request, username=username, password=password)
 
-        # Check if authentication successful
         if user is not None:
             login(request, user)
-            return HttpResponseRedirect(reverse("profile", args=[user.id]))
+            if user.is_secretaria:
+                return redirect(reverse("dashboard"))
+            else:
+                return redirect(reverse("index"))
         else:
             return render(request, "armois/profesional_login.html", {
-                "message": "Invalid username and/or password."
+                "message": "Usuario y/o contraseña incorrectos."
             })
     else:
         return render(request, "armois/profesional_login.html")

@@ -8,41 +8,249 @@
       <title>Centro Medico: Armois</title>
     {% endblock %}
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous" />
-    <link rel="stylesheet" href="{% static 'armois/styles.css' %}" />
+    <link rel="stylesheet" href="{% static 'armois/css/styles.css' %}" />
   </head>
   <body>
-    <div class="wrapper">
-      <nav>
-        <ul class="nav justify-content-center">
-          <li class="nav-item">
-            <a class="nav-link active" aria-current="page" href="#">Atenciones Clínicas</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="{% url 'especialidades' %}">Especialidades</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="#">Medicina Complementaria</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="#">Talleres y Actividades</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="#">Convenios</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="#">Contacto</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link btn btn-primary active btn-reserva" href="{% url 'reservas' %}" role="button">RESERVA TU HORA</a>
-          </li>
-        </ul>
-      </nav>
-
-      <div class="container">
-        {% block content %}
-
-        {% endblock %}
+    {% comment %}NAV{% endcomment %}
+    <nav class="navbar navbar-expand-lg bg-body-tertiary">
+      <div class="container-fluid">
+        <a class="navbar-brand" href="{% url 'index' %}"><img src="{% static 'armois/img/logo.png' %}" alt="LOGO" style="max-width: 150px;" /></a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+          <ul class="navbar-nav me-auto mb-2 mb-lg-0 justify-content-center">
+            {% if request.path == '/' %}
+              <li class="nav-item">
+                <a class="nav-link active" aria-current="page" href="#bienvenida">Inicio</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="#especialidades">Especialidades</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="#somos">Quienes somos</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="#modalidades">Modalidades</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="#profesionales">Profesionales</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="#testimonios">Testimonios</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="#">Contacto</a>
+              </li>
+            {% endif %}
+          </ul>
+          <ul class="navbar-nav ms-auto">
+            <li class="nav-item">
+              <a class="nav-link btn btn-primary active btn-reserva" href="{% url 'reservas' %}" role="button">RESERVA TU HORA</a>
+            </li>
+          </ul>
+        </div>
       </div>
+    </nav>
+    <div class="wrapper">
+      {% block content %}
+        {% comment %}BIENVENIDA{% endcomment %}
+        <div class="container-fluid vh-100" id="bienvenida">
+          <div class="row">
+            <div class="col-12 col-md-12 col-lg-6">
+              <h3>Descubre una atención médica integral en Centro Médico ARMOIS</h3>
+              <h1 class="mt-4" style="font-weight: bold;">Donde la excelencia en cuidado de la salud se encuentra con la calidez humana</h1>
+            </div>
+            <div class="col-12 col-md-12 col-lg-6 mt-4">
+              <h3>¿Cómo podemos ayudarte?</h3>
+              <div class="container-fluid">
+                <div class="row">
+                  <div class="col-12 col-md-12 col-lg-6">
+                    <div class="d-grid gap-2 mt-4">
+                      <button class="btn btn-outline-primary btn-ayuda" type="button">Listado de especialidades</button>
+                      <button class="btn btn-outline-primary btn-ayuda" type="button">Convenios</button>
+                    </div>
+                  </div>
+                  <div class="col-12 col-md-12 col-lg-6">
+                    <div class="d-grid gap-2 mt-4">
+                      <button class="btn btn-outline-primary btn-ayuda" type="button">Testimonios</button>
+                      <button class="btn btn-outline-primary btn-ayuda" type="button">Concierte una cita</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {% comment %}ESPECIALIDADES{% endcomment %}
+        <div class="container-fluid container-cards g-0 px-5 my-3" id="especialidades" style="align-content: center; text-align: center">
+          <div class="row row-cards row-cards-especialidades" style="align-items: center;">
+            <div class="col-12 col-md-12 col-lg-4 p-4 card-especialidad watermark">
+              <h3>Conoce nuestras <span class="card-highlight">especialidades</span></h3>
+              <p class="mt-4">Buscamos la recuperación y conservación de la salud, a través de un modelo integrado basado en evidencias, métodos innovadores y cariño hacia el mundo.</p>
+            </div>
+
+            <div class="col-12 col-md-12 col-lg-1"></div>
+            <div class="col-12 col-md-12 col-lg-7 card-especialidad">
+              <div class="row row-cols-1 row-cols-md-1 row-cols-lg-1 row-cols-xl-4 gy-3 my-5">
+                <div class="col">
+                  <div class="card">
+                    <img src="{% static 'armois/img/medicina_estilo_vida.png' %}" class="card-img-top" alt="..." />
+                    <div class="card-body">
+                      <h5 class="card-title" style="color: var(--card-highlight) !important;">Medicinas Alternativas</h5>
+                    </div>
+                  </div>
+                </div>
+                <div class="col">
+                  <div class="card">
+                    <img src="{% static 'armois/img/salud_mental.png' %}" class="card-img-top" alt="..." />
+                    <div class="card-body">
+                      <h5 class="card-title" style="color: var(--card-highlight) !important;">Salud Mental</h5>
+                    </div>
+                  </div>
+                </div>
+                <div class="col">
+                  <div class="card">
+                    <img src="{% static 'armois/img/enfermeria.png' %}" class="card-img-top" alt="..." />
+                    <div class="card-body">
+                      <h5 class="card-title" style="color: var(--card-highlight) !important;">Enfermería</h5>
+                    </div>
+                  </div>
+                </div>
+                <div class="col">
+                  <div class="card">
+                    <img src="{% static 'armois/img/nutricion.png' %}" class="card-img-top" alt="..." />
+                    <div class="card-body">
+                      <h5 class="card-title" style="color: var(--card-highlight) !important;">Nutrición</h5>
+                    </div>
+                  </div>
+                </div>
+                <div class="col">
+                  <div class="card">
+                    <img src="{% static 'armois/img/fisioterapia.png' %}" class="card-img-top" alt="..." />
+                    <div class="card-body">
+                      <h5 class="card-title" style="color: var(--card-highlight) !important;">Kinesiología</h5>
+                    </div>
+                  </div>
+                </div>
+                <div class="col">
+                  <div class="card">
+                    <img src="{% static 'armois/img/Hidroterapia.png' %}" class="card-img-top" alt="..." />
+                    <div class="card-body">
+                      <h5 class="card-title" style="color: var(--card-highlight) !important;">Hidroterapia</h5>
+                    </div>
+                  </div>
+                </div>
+                <div class="col">
+                  <div class="card">
+                    <img src="{% static 'armois/img/medicina_general.png' %}" class="card-img-top" alt="..." />
+                    <div class="card-body">
+                      <h5 class="card-title" style="color: var(--card-highlight) !important;">Terapia Ocupacional</h5>
+                    </div>
+                  </div>
+                </div>
+                <div class="col">
+                  <a href="{% url 'especialidades' %}" class="card-link">
+                    <div class="card especialidad-ver-todas">
+                      <div class="card-body">
+                        <h5 class="card-title">Ver todas las especialidades <i class="fa-solid fa-arrow-right"></i></h5>
+                      </div>
+                    </div>
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {% comment %}QUIENES SOMOS{% endcomment %}
+        <div class="container-fluid g-0 px-5" id="somos">
+          <div class="row">
+            <div class="col-12">
+              <span class="somos-titulo mb-3"><h4>Quienes somos</h4></span>
+              <h2 class="my-3">¿Qué es Centro Médico Armois?</h2>
+              <p>Nuestra misión es atender a las necesidades de salud de nuestros pacientes, involucrándolos a ellos/as y su red familiar en la recuperación y mantención de salud, a través de un trato digno, resguardando su intimidad y proporcionado bienestar físico, mental y espiritual.</p>
+            </div>
+          </div>
+        </div>
+
+        {% comment %}MODALIDADES{% endcomment %}
+        <div class="container-fluid px-5" id="modalidades">
+          <div class="row row-cards row-modalidades" style="align-items: center;">
+            <div class="col-12 col-md-12 col-lg-4 p-4">
+              <h3>Nos adaptamos a tus <span class="modalidad-highlight">necesidades</span></h3>
+            </div>
+
+            <div class="col-12 col-md-12 col-lg-1"></div>
+            <div class="col-12 col-md-12 col-lg-7">
+              <div class="row row-cols-1 row-cols-lg-2 gy-3">
+                <div class="col">
+                  <div class="card atencion-remota">
+                    <img src="{% static 'armois/img/telemedicine.webp' %}" class="card-img-top card-img-fixed-height" alt="..." />
+                    <div class="card-body">
+                      <h5 class="card-title">TELEMEDICINA</h5>
+                      <p class="card-text">
+                        Coordinar al +56912345678 <i class="fa-solid fa-mobile-screen"></i>
+                      </p>
+                    </div>
+                  </div>
+                </div>
+                <div class="col">
+                  <a href="{% url 'reservas' %}" class="card-link">
+                    <div class="card atencion-presencial">
+                      <img src="{% static 'armois/img/armois-building.jpg' %}" class="card-img-top card-img-fixed-height" alt="..." />
+                      <div class="card-body">
+                        <h5 class="card-title">PRESENCIAL</h5>
+                        <h5 class="card-text">Agenda ahora <i class="fa-solid fa-arrow-right"></i></h5>
+                      </div>
+                    </div>
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {% comment %}PROFESIONALES{% endcomment %}
+        <div class="container-fluid" id="profesionales">
+          <div class="row">
+            <div class="col-12">
+              <span class="profesionales-titulo mb-3"><h4>Profesionales de calidad</h4></span>
+              <h2 class="mb-3">Conoce a nuestro equipo</h2>
+            </div>
+          </div>
+          <div class="row row-cols-auto justify-content-md-center" style="justify-content: center;">
+            <div class="col-md-auto">
+              <div class="card atencion-remota">
+                <div class="card-body">
+                  <img src="{% static 'armois/img/profesional3.webp' %}" class="card-img-top card-img-fixed-height" alt="..." />
+                  <h5 class="card-title mt-3">PROFESIONAL 1</h5>
+                  <span class="profesion-titulo"><p>Psicóloga</p></span>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-md-auto">
+              <div class="card atencion-remota">
+                <div class="card-body">
+                  <img src="{% static 'armois/img/profesional2.webp' %}" class="card-img-top card-img-fixed-height" alt="..." />
+                  <h5 class="card-title mt-3">PROFESIONAL 2</h5>
+                  <span class="profesion-titulo"><p>Nutricionista</p></span>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-md-auto">
+              <div class="card atencion-remota">
+                <div class="card-body">
+                  <img src="{% static 'armois/img/profesional1.webp' %}" class="card-img-top card-img-fixed-height" alt="..." />
+                  <h5 class="card-title mt-3">PROFESIONAL 3</h5>
+                  <span class="profesion-titulo"><p>Kinesiólogo</p></span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      {% endblock %}
     </div>
 
     <footer>
@@ -51,19 +259,20 @@
           <a class="nav-link" href="{% url 'index' %}">Home</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="#">Nosotros/as</a>
+          <a class="nav-link" href="#somos">Nosotros/as</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="#">Servicios</a>
+          <a class="nav-link" href="#especialidades">Servicios</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="#">Contacto</a>
+          <a class="nav-link" href="{% url 'reservas' %}">Reserva tu hora</a>
         </li>
       </ul>
     </footer>
 
     <script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+    <script src="https://kit.fontawesome.com/bee1354801.js" crossorigin="anonymous"></script>
     <script src="{% static 'armois/especialidades.js' %}"></script>
   </body>
 </html>

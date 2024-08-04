@@ -1,0 +1,400 @@
+:root {
+    --gdark: #076054;
+    --reservabtn: #f92880;
+    --reservabtnhv: #F06F9E;
+    --reservabtnhv-antiguo: #f08cb1;
+    --background-bienvenida: #fff3f8;
+    --card-background: #f9b6cf;
+    --card-highlight: #43192e;
+    --subtitulos: #00C3CD;
+    /* --background-somos: #f9b6cf; same as  card-background*/
+}
+
+@media screen and (max-width: 1200px) {
+    .card-especialidad {
+        margin-top: 20px;
+    }
+
+    #somos{
+        margin-top: 40px;
+    }
+
+    #modalidades{
+        padding-bottom: 20px;
+    }
+
+    #profesionales{
+        margin: 40px 0;
+    }
+    #profesionales .card {
+        margin-bottom: 40px;
+    }
+}
+
+@media screen and (min-width: 1200px) {
+    .row-cards-especialidades {
+        padding: 100px;
+    }
+
+    #especialidades {
+        margin-top: -450px !important;
+    }
+
+    #somos .row {
+        justify-content: center;
+        width: 900px;
+    }
+
+    .row-modalidades {
+        padding: 100px;
+    }
+}
+
+.btn-reserva {
+    background-color: var(--reservabtn) !important;
+    color: white !important;
+}
+
+.btn-reserva:hover {
+    background-color: var(--reservabtnhv) !important;
+    color: white !important;
+}
+
+.btn-ayuda {
+    background-color: var(--reservabtnhv);
+    border: 1px solid var(--reservabtnhv);
+    color: white;
+}
+
+.btn-ayuda:hover,
+.btn-ayuda:active {
+    border: 1px solid var(--reservabtnhv-antiguo);
+    background-color: var(--reservabtnhv-antiguo);
+    color: white;
+}
+
+body {
+    background-color: var(--background-bienvenida);
+    color: #333;
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+.wrapper {
+    flex: 1;
+}
+
+nav {
+    background-color: var(--gdark);
+    padding: 10px 0;
+}
+
+nav .nav-link,
+footer .nav-link {
+
+    font-size: 15px;
+}
+
+footer .nav-link {
+    color: white;
+}
+
+nav .nav-link:hover,
+footer .nav-link:hover {
+    color: #97B1AB;
+}
+
+footer {
+    background-color: var(--gdark);
+    padding: 20px 0;
+    text-align: center;
+    width: 100%;
+    position: relative;
+    bottom: 0;
+    left: 0;
+    height: 90px;
+}
+
+footer .nav-item {
+    margin-right: 10px;
+}
+
+.letra-btn {
+    margin: 8px 8px 8px 0;
+    width: 40px;
+    height: 40px;
+    font-weight: 700;
+    font-size: 14px;
+    line-height: 27px;
+    text-align: center;
+    position: relative;
+    text-decoration: none;
+    color: var(--gdark);
+    background-color: #fff;
+    border: 1px solid var(--gdark);
+    border-radius: 3px;
+}
+
+.letra-btn:hover {
+    background-color: rgb(240, 240, 240);
+    border: 1px solid var(--gdark);
+}
+
+.especialidades-container {
+    background-color: white;
+    border: 1px solid white;
+    border-radius: 5px;
+    padding: 40px 10px;
+}
+
+.especialidades-titulo {
+    text-align: center;
+    font-weight: 400;
+    font-size: 28px;
+    color: #ffffff;
+    padding: 10px;
+    background-color: var(--gdark);
+    margin-top: 40px;
+    border-radius: 5px;
+}
+
+#especialidades-list li {
+    margin-top: 20px;
+}
+
+.especialidad-card-body {
+    background-color: #489385;
+    color: white;
+    text-align: justify;
+    padding: 40px 10px;
+    height: 100%;
+    width: 100%;
+}
+
+/* .especialidad-card-img {
+    object-fit: cover;
+    height: 100%;
+    width: 100%;
+} */
+
+.formulario-reserva {
+    /* Estilos específicos para el formulario de reserva de cita médica */
+    background-color: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+legend {
+    font-size: 1.2em;
+    /* Tamaño de fuente */
+    font-weight: bold;
+    /* Negrita */
+    color: #333;
+    /* Color del texto */
+    margin-bottom: 10px;
+    /* Margen inferior para separación */
+}
+
+.legend-titulo,
+.legend-profesional {
+    font-style: italic;
+}
+
+.legend-datos {
+    font-size: 0.9em;
+    color: #666;
+}
+
+.card-especialidad {
+    background-color: var(--card-background);
+    border-radius: 15px;
+    text-align: -webkit-center;
+}
+
+.watermark {
+    background-image: url(../img/logo-watermark.png) !important;
+    background-position: 50% 50% !important;
+    background-repeat: no-repeat;
+    color: maroon;
+    align-content: center;
+    height: 500px;
+    border-radius: 15px;
+    font-weight: 500;
+}
+
+.card-highlight {
+    font-size: 1.5em;
+    font-weight: 600;
+    color: var(--card-highlight);
+
+}
+
+.container-cards .card {
+    align-items: center;
+    padding: 25px;
+    height: 190px;
+    width: 210px;
+
+}
+
+.container-cards .card img {
+    width: 70px;
+}
+
+
+.container-cards {
+    min-height: 100vh;
+}
+
+.card-link {
+    text-decoration: none;
+}
+
+.especialidad-ver-todas {
+    background-color: var(--card-highlight);
+    border-radius: 15px;
+    box-shadow: 0 0 3px 3px rgba(0, 0, 0, 0.3);
+    transition: box-shadow 0.3s ease;
+    cursor: pointer;
+}
+
+.especialidad-ver-todas:hover {
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+}
+
+.especialidad-ver-todas .card-body {
+    padding: 25px;
+}
+
+.especialidad-ver-todas .card-title,
+.especialidad-ver-todas .card-text {
+    color: var(--background-bienvenida);
+}
+
+.card-img-fixed-height {
+    height: 300px;
+    object-fit: cover;
+}
+
+.atencion-presencial {
+    background-color: white;
+    box-shadow: 0 0 3px 3px rgba(0, 0, 0, 0.3);
+    transition: box-shadow 0.3s ease;
+    cursor: pointer;
+}
+
+.atencion-remota,
+.atencion-presencial h5 {
+    color: var(--card-highlight) !important;
+    font-weight: 600;
+}
+
+#bienvenida {
+    background-image: linear-gradient(rgba(255, 243, 248, 0.8), rgba(255, 243, 248, 0.8)), url(../img/familia.jpg);
+    background-position: 50% 50% !important;
+    background-size: cover;
+    background-repeat: no-repeat;
+}
+
+#bienvenida,
+#modalidades,
+#somos,
+#especialidades,
+#profesionales {
+    align-content: center;
+    text-align: center;
+}
+
+#somos {
+    height: 320px;
+    background-color: var(--card-background);
+    text-align: -webkit-center;
+}
+
+#somos h2 {
+    color: var(--card-highlight);
+    font-weight: 600;
+    margin-top: 0;
+}
+
+#somos p {
+    color: maroon;
+}
+
+.somos-titulo {
+    display: table-cell;
+    background-color: white;
+    border-radius: 12px;
+    width: 640px;
+    padding: 10px 0px;
+}
+
+.somos-titulo h4 {
+    color: var(--subtitulos);
+    font-weight: 600;
+}
+
+#modalidades {
+    background-color: var(--card-highlight);
+    color: white;
+}
+
+.modalidad-highlight {
+    font-size: 1.5em;
+    font-weight: 600;
+    color: white;
+}
+
+#profesionales {
+    min-height: 100vh;
+}
+
+#profesionales h2 {
+    color: var(--card-highlight);
+    font-weight: 600;
+    margin-top: 0;
+}
+
+.profesionales-titulo h4 {
+    color: var(--subtitulos);
+    font-weight: 600;
+}
+
+#profesionales img {
+    border: 8px solid var(--background-bienvenida);
+    /* border-color: #fff; */
+    /* border-color: var(--white); */
+    border-radius: 50%;
+    margin: 0 auto;
+    width: 80%;
+    height: auto;
+    object-fit: cover;
+    aspect-ratio: 1/1;
+}
+
+#profesionales .card {
+    width: 360px;
+    height: 420px;
+}
+
+#profesionales .card-body {
+    background-color: var(--card-background);
+}
+
+.profesion-titulo {
+    background-color: var(--subtitulos);
+    color: white;
+    display: inline-block;
+    padding: 10px 25px 0px;
+    font-weight: 700;
+    border-radius: 40px;
+}
+
+.profesion-titulo p {
+    font-size: 13px;
+}

@@ -5,37 +5,60 @@
 {% endblock %}
 
 {% block content %}
-  <form id="agendarForm" class="formulario-reserva mt-5" method="post" action="{% url 'solicitar_datos_paciente' %}" novalidate>
-    {% csrf_token %}
-    <fieldset>
-      <legend class="legend-titulo">¡Reserva tu hora con nosotras/os!</legend>
-      <div class="mb-3">
-        <label for="cboEspecialidad" class="form-label">Especialidad:</label>
-        <select id="cboEspecialidad" class="form-select" aria-label="Especialidad Select" required></select>
-      </div>
-      <div class="mb-3">
-        <label for="cboSubespecialidad" id="subespecialidadLabel">Subespecialidad:</label>
-        <select id="cboSubEspecialidad" class="form-select" aria-label="Subspecialidad Select"></select>
-      </div>
-      <div class="mb-3">
-        <label for="cboProfesional" id="profesionalLabel">Profesional:</label>
-        <select id="cboProfesional" class="form-select" aria-label="Profesional Select" name="cboProfesional" required></select>
-      </div>
-      <!-- Otros campos del formulario para la cita -->
-      <div class="mb-3">
-        <label for="cboHorario" id="horarioLabel">Horario:</label>
-        <select id="cboHorario" class="form-select" aria-label="Horario Select" name="horario" required></select>
-      </div>
+  <div class="container">
+    <form id="agendarForm" class="formulario-reserva mt-5" method="post" action="{% url 'solicitar_datos_paciente' %}" novalidate>
+      {% csrf_token %}
+      <fieldset>
+        <legend class="legend-titulo">¡Reserva tu hora con nosotras/os!</legend>
+        <div class="mb-3">
+          <label for="cboEspecialidad" class="form-label">Especialidad:</label>
+          <select id="cboEspecialidad" class="form-select" aria-label="Especialidad Select" required></select>
+        </div>
+        <div class="mb-3">
+          <label for="cboSubespecialidad" id="subespecialidadLabel">Subespecialidad:</label>
+          <select id="cboSubEspecialidad" class="form-select" aria-label="Subspecialidad Select"></select>
+        </div>
+        <div class="mb-3">
+          <label for="cboProfesional" id="profesionalLabel">Profesional:</label>
+          <select id="cboProfesional" class="form-select" aria-label="Profesional Select" name="cboProfesional" required></select>
+        </div>
+        <!-- Otros campos del formulario para la cita -->
+        <div class="mb-3">
+          <label for="cboHorario" id="horarioLabel">Horario:</label>
+          <select id="cboHorario" class="form-select" aria-label="Horario Select" name="horario" required></select>
+        </div>
 
-      <input type="hidden" id="dia" name="dia" value="" />
-      <input type="hidden" id="mes" name="mes" value="" />
-      <input type="hidden" id="anio" name="anio" value="" />
-      <input type="hidden" id="hora_inicio" name="hora_inicio" value="" />
-      <input type="hidden" id="hora_fin" name="hora_fin" value="" />
+        <input type="hidden" id="dia" name="dia" value="" />
+        <input type="hidden" id="mes" name="mes" value="" />
+        <input type="hidden" id="anio" name="anio" value="" />
+        <input type="hidden" id="hora_inicio" name="hora_inicio" value="" />
+        <input type="hidden" id="hora_fin" name="hora_fin" value="" />
 
-      <button type="submit" class="btn btn-primary" value="agendar_profesional">Ir a datos personales</button>
-    </fieldset>
-  </form>
+        <button type="submit" class="btn btn-primary" value="agendar_profesional">Ir a datos personales</button>
+      </fieldset>
+      <!-- Contenedor para la alerta -->
+      <div id="alertContainer" class="container mt-3">
+        <div id="alertMessage" class="alert alert-success alert-dismissible fade show" role="alert" style="display: none;">
+          <strong>¡Reserva realizada!</strong> La cita se ha reservado con éxito.
+          <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+      </div>
+    </form>
+  </div>
 
   <script src="{% static 'armois/reservas.js' %}"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      const showAlert = {{ show_alert|yesno:"true,false" }};
+      const cardContainer = document.querySelector('.card-container');
+      const alertMessage = document.getElementById('alertMessage');
+
+      if (showAlert) {
+        // Mostrar la alerta
+        if (alertMessage) {
+          alertMessage.style.display = 'block';
+        }
+      }
+    });
+  </script>
 {% endblock %}

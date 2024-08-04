@@ -1,8 +1,10 @@
-from django.http import JsonResponse
 from django.shortcuts import render
+from django.http import JsonResponse
+from django.shortcuts import redirect, render
 from .models import Especialidad, Subespecialidad, Profesional, HorarioAtencion
 from googlecalendar import google_calendar_class as gc
 from datetime import datetime
+from googlecalendar.google_calendar_class import GoogleCalendarManager
 
 
 # Create your views here.
@@ -144,7 +146,8 @@ def reservas(request):
         })
     else:
         # Renderizar el formulario de selección de horario
-        return render(request, "armois/reservas.html")
+        show_alert = request.session.pop('show_alert', False)
+        return render(request, 'armois/reservas.html', {'show_alert': show_alert})
 
 
 def reservas_a_calendario(request):
@@ -161,12 +164,14 @@ def reservas_a_calendario(request):
         nombre_profesional = request.POST.get('nombre_profesional')
         fecha_hora_inicio_str = request.POST.get('fecha_hora_inicio')
         fecha_hora_inicio_str = fecha_hora_inicio_str.replace('-T', 'T')
-        fecha_hora_inicio = datetime.strptime(fecha_hora_inicio_str, '%Y-%m-%dT%H:%M:%S')
+        fecha_hora_inicio = datetime.strptime(
+            fecha_hora_inicio_str, '%Y-%m-%dT%H:%M:%S')
         hora_inicio = fecha_hora_inicio.strftime('%Y-%m-%dT%H:%M:%S')
 
         fecha_hora_final_str = request.POST.get('fecha_hora_final')
         fecha_hora_final_str = fecha_hora_final_str.replace('-T', 'T')
-        fecha_hora_final = datetime.strptime(fecha_hora_final_str, '%Y-%m-%dT%H:%M:%S')
+        fecha_hora_final = datetime.strptime(
+            fecha_hora_final_str, '%Y-%m-%dT%H:%M:%S')
         hora_final = fecha_hora_final.strftime('%Y-%m-%dT%H:%M:%S')
 
         # Lógica para agregar el evento al calendario con los datos del paciente y profesional
@@ -176,9 +181,11 @@ def reservas_a_calendario(request):
             id=profesional_id).subespecialidad
         correo_profesional = Profesional.objects.get(id=profesional_id).correo
         if subespecialidad_profesional is not None:
-            summary = f"{nombre_profesional} ({subespecialidad_profesional}) \nAtención a: {nombre_paciente}"
+            summary = f"{nombre_profesional} ({subespecialidad_profesional}) \nAtención a: {
+                nombre_paciente}"
         else:
-            summary = f"{nombre_profesional} \n{especialidad_profesional} \nAtención a: {nombre_paciente}"
+            summary = f"{nombre_profesional} \n{
+                especialidad_profesional} \nAtención a: {nombre_paciente}"
         timezone = "America/Santiago"
         attendees = [correo_profesional, correo_paciente]
 
@@ -192,8 +199,15 @@ def reservas_a_calendario(request):
                                       attendees)
 
         # Redirigir a una página de éxito o renderizar una plantilla de éxito
-        return render(request, 'armois/reservas.html')
+        request.session['show_alert'] = True
+        return redirect('reservas')
 
     else:
         # Si no es un método POST, redirigir a la página de reserva
         return render(request, "armois/solicitar_datos_paciente.html/")
+
+
+def listar_reservas(request):
+    calendar_manager = GoogleCalendarManager()
+    events = calendar_manager.list_upcoming_events()
+    return render(request, 'armois/listar_reservas.html', {'events': events})

@@ -1,7 +1,7 @@
 {% load static %}
 <nav class="navbar navbar-expand-lg bg-body-tertiary">
   <div class="container-fluid">
-    <a class="navbar-brand" href="{% url 'index' %}"><img src="{% static 'armois/img/logo.png' %}" alt="LOGO" width="150"" /></a>
+    <a class="navbar-brand" href="{% url 'index' %}"><img src="{% static 'armois/img/logo.png' %}" alt="LOGO" width="150" /></a>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
       <ul class="navbar-nav me-auto mb-2 mb-lg-0 justify-content-center">
@@ -28,12 +28,21 @@
         </li>
       </ul>
       <ul class="navbar-nav ms-auto">
-        <li class="nav-item">
-          <a class="nav-link btn btn-primary active btn-reserva text-uppercase mb-2 mb-lg-0" href="{% url 'reservas' %}" role="button">Reserva tu hora</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link btn btn-primary active btn-reserva text-uppercase ms-0 ms-lg-2" href="{% url 'login' %}" role="button">Inicia sesión</a>
-        </li>
+        {% if user.is_authenticated %}
+          <li class="nav-item">
+            <a class="nav-link btn btn-reserva" href="{% url 'profile' %}"><i class="fas fa-user"></i> Perfil</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link btn btn-reserva text-uppercase ms-0 ms-lg-2" href="{% url 'logout' %}" role="button">Desconectarse</a>
+          </li>
+        {% else %}
+          <li class="nav-item">
+            <a class="nav-link btn btn-reserva text-uppercase mb-2 mb-lg-0" href="{% url 'reservas' %}" role="button">Reserva tu hora</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link btn btn-reserva text-uppercase ms-0 ms-lg-2" href="{% url 'login' %}" role="button">Inicia sesión</a>
+          </li>
+        {% endif %}
       </ul>
     </div>
   </div>

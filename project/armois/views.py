@@ -18,35 +18,6 @@ def index(request):
     return render(request, "armois/index.html")
 
 
-def dashboard(request):
-    return render(request, "armois/dashboard.html")
-
-
-def login_view(request):
-    if request.method == "POST":
-        username = request.POST.get("username")
-        password = request.POST.get("password")
-        user = authenticate(request, username=username, password=password)
-
-        if user is not None:
-            login(request, user)
-            if user.is_secretaria:
-                return redirect(reverse("dashboard"))
-            else:
-                return redirect(reverse("index"))
-        else:
-            return render(request, "armois/profesional_login.html", {
-                "message": "Usuario y/o contraseña incorrectos."
-            })
-    else:
-        return render(request, "armois/profesional_login.html")
-
-
-def logout_view(request):
-    logout(request)
-    return HttpResponseRedirect(reverse("template"))
-
-
 # specialty tab
 def especialidad(request):
     especialidades = Especialidad.objects.all().order_by("nombre")
@@ -245,6 +216,7 @@ def reservas_a_calendario(request):
 #     events = calendar_manager.list_upcoming_events()
 #     return render(request, 'armois/listar_reservas.html', {'events': events})
 
+
 @login_required
 def listar_reservas(request):
     if request.user.is_secretaria:
@@ -265,3 +237,34 @@ def listar_reservas(request):
         return render(request, 'armois/listar_reservas.html', {'events': events})
     else:
         return redirect('armois/index')
+
+
+def dashboard(request):
+    return render(request, "armois/dashboard.html")
+
+
+def login_view(request):
+    if request.method == "POST":
+        username = request.POST.get("username")
+        password = request.POST.get("password")
+        user = authenticate(request, username=username, password=password)
+
+        if user is not None:
+            login(request, user)
+            return render(request, 'armois/profile_profesional.html', {'user': request.user})
+        else:
+            return render(request, "armois/login_profesional.html", {
+                "message": "Usuario y/o contraseña incorrectos."
+            })
+    else:
+        return render(request, "armois/login_profesional.html")
+
+
+def logout_view(request):
+    logout(request)
+    return HttpResponseRedirect(reverse("index"))
+
+
+@login_required
+def profile_view(request):
+    return render(request, 'armois/profile_profesional.html', {'user': request.user})

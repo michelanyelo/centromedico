@@ -24,6 +24,9 @@
           <form id="login-form" method="POST" action="{% url 'login' %}" onsubmit="mostrarDatos(event)">
             {% csrf_token %}
             <h1 class="text-center">Inicia sesión</h1>
+            {% if message %}
+              <div class="alert alert-danger" role="alert">{{ message }}</div>
+            {% endif %}
             <div class="mb-3">
               <div class="form-floating">
                 <input type="text" name="username" autocomplete="off" id="usernameLogin" class="form-control" placeholder="Usuario" />
@@ -85,12 +88,9 @@
         alert('Por favor, complete todos los campos.')
         return
       }
-    
-      alert('Username: ' + username + '\nPassword: ' + password)
-    
       // Enviar el formulario después de mostrar el alert
       event.target.submit()
     }
   </script>
-  {% comment %} <script src="{% static 'armois/js/login.js' %}"></script> {% endcomment %}
+  <script src="{% static 'armois/js/login.js' %}"></script>
 {% endblock %}

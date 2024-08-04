@@ -9,7 +9,7 @@
     --card-highlight: #43192e;
     --subtitulos: #00C3CD;
     --lightText: #959595;
-   
+
     /* --background-somos: #f9b6cf; same as  card-background*/
 }
 
@@ -472,12 +472,12 @@ legend {
     color: var(--text);
 }
 
-#login-form .btn-success{
+#login-form .btn-success {
     background-color: var(--success);
     border-color: var(--success);
 }
 
-#Register-form .btn-warning{
+#Register-form .btn-warning {
     background-color: var(--reservabtnhv);
     border-color: var(--reservabtnhv);
     color: var(--default);
@@ -537,6 +537,18 @@ legend {
     z-index: 0;
     left: 0;
     white-space: nowrap;
+}
 
+/* PROFILE */
+.card-profile {
+    background-color: var(--card-background);
+}
 
+.card-profileinfo {
+    background-color: var(--default);
+}
+
+.card-profileinfo-header {
+    background-color: var(--card-highlight);
+    color: var(--default);
 }

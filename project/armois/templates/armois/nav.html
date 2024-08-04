@@ -1,0 +1,37 @@
+{% load static %}
+<nav class="navbar navbar-expand-lg bg-body-tertiary">
+  <div class="container-fluid">
+    <a class="navbar-brand" href="{% url 'index' %}"><img src="{% static 'armois/img/logo.png' %}" alt="LOGO" style="max-width: 150px;" /></a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0 justify-content-center">
+        <li class="nav-item">
+          <a class="nav-link active" aria-current="page" href="{% url 'index' %}">Inicio</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#especialidades">Especialidades</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#somos">Quienes somos</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#modalidades">Modalidades</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#profesionales">Profesionales</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#testimonios">Testimonios</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#">Contacto</a>
+        </li>
+      </ul>
+      <ul class="navbar-nav ms-auto">
+        <li class="nav-item">
+          <a class="nav-link btn btn-primary active btn-reserva" href="{% url 'reservas' %}" role="button">RESERVA TU HORA</a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>

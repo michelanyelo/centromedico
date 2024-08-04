@@ -15,7 +15,7 @@ from django.contrib.auth import authenticate, login, logout
 
 
 def index(request):
-    return render(request, "armois/layout.html")
+    return render(request, "armois/index.html")
 
 
 def login_view(request):
@@ -259,4 +259,4 @@ def listar_reservas(request):
 
         return render(request, 'armois/listar_reservas.html', {'events': events})
     else:
-        return redirect('armois/layout')
+        return redirect('armois/index')

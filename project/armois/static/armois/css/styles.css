@@ -527,14 +527,6 @@ legend {
     transition: all 0.3s;
 }
 
-.form-control {
-    box-shadow: none;
-    border-radius: 0;
-    background: 0 0;
-    border: none;
-    padding: 0;
-}
-
 .blmd-label {
     transition: all 0.2s;
     position: absolute;

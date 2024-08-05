@@ -240,7 +240,7 @@ def listar_reservas(request):
 
 
 def dashboard(request):
-    return render(request, "armois/dashboard.html")
+    return render(request, "dashboard/dashboard.html")
 
 
 def login_view(request):
@@ -251,7 +251,7 @@ def login_view(request):
 
         if user is not None:
             login(request, user)
-            return render(request, 'armois/profile_profesional.html', {'user': request.user})
+            return render(request, 'dashboard/profile_profesional.html', {'user': request.user})
         else:
             return render(request, "armois/login_profesional.html", {
                 "message": "Usuario y/o contraseña incorrectos."
@@ -267,4 +267,4 @@ def logout_view(request):
 
 @login_required
 def profile_view(request):
-    return render(request, 'armois/profile_profesional.html', {'user': request.user})
+    return render(request, 'dashboard/profile_profesional.html', {'user': request.user})

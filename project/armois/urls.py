@@ -15,7 +15,6 @@ urlpatterns = [
     path("reservas/horarios/<int:profesional_id>", views.get_horarios_disponibles, name="get_horarios_disponibles"),
     path("reservas/solicitar-datos-paciente/", views.reservas, name="solicitar_datos_paciente"),
     path("reservas/reservas-a-calendario/", views.reservas_a_calendario, name="reservas_a_calendario"),
-    path('reservas/listar/', views.listar_reservas, name='listar_reservas'),
     path('dashboard/', views.dashboard, name='dashboard'),
     path('profile/', views.profile_view, name='profile') 
 ]

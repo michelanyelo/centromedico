@@ -217,27 +217,6 @@ def reservas_a_calendario(request):
 #     return render(request, 'armois/listar_reservas.html', {'events': events})
 
 
-@login_required
-def listar_reservas(request):
-    if request.user.is_secretaria:
-        calendar_manager = gc.GoogleCalendarManager()
-        start_date = datetime.now(timezone.utc) - timedelta(days=30)
-        end_date = datetime.now(timezone.utc) + timedelta(days=30)
-        events = calendar_manager.list_events_in_date_range(
-            start_date, end_date)
-
-        for event in events:
-            if 'dateTime' in event['start']:
-                event['start']['dateTime'] = datetime.strptime(
-                    event['start']['dateTime'], '%Y-%m-%dT%H:%M:%S%z')
-            if 'dateTime' in event['end']:
-                event['end']['dateTime'] = datetime.strptime(
-                    event['end']['dateTime'], '%Y-%m-%dT%H:%M:%S%z')
-
-        return render(request, 'armois/listar_reservas.html', {'events': events})
-    else:
-        return redirect('armois/index')
-
 
 def dashboard(request):
     return render(request, "dashboard/dashboard.html")

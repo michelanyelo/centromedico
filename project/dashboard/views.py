@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from .models import HorarioAtencion, Profesional, Especialidad, Subespecialidad
+from armois.models import HorarioAtencion, Profesional, Especialidad, Subespecialidad
 from .forms import HorarioAtencionForm, ProfesionalForm
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import authenticate, login, logout
@@ -26,7 +26,7 @@ def add_horario(request):
 
 
 @login_required
-def add_medico(request):
+def add_profesional(request):
     if request.method == 'POST':
         form = ProfesionalForm(request.POST)
         if form.is_valid():
@@ -34,7 +34,7 @@ def add_medico(request):
             return redirect('dashboard_view')
     else:
         form = ProfesionalForm()
-    return render(request, 'dashboard/add_medico.html', {'form': form})
+    return render(request, 'dashboard/nuevo_profesional.html', {'form': form})
 
 
 @login_required

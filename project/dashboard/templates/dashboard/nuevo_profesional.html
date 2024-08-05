@@ -1,0 +1,59 @@
+{% extends 'dashboard/layout.html' %}
+{% load custom_filters %}
+
+{% block content %}
+  <div class="container mt-4">
+    <h2 class="mb-4">Agregar Nuevo Profesional</h2>
+
+    <form method="post" class="row g-3">
+      {% csrf_token %}
+      {{ form.non_field_errors }}
+
+      <div class="col-md-6">
+        <label for="{{ form.nombre.id_for_label }}" class="form-label">Nombres</label>
+        {{ form.nombre|add_class:'form-control' }}
+        {{ form.nombre.errors }}
+      </div>
+
+      <div class="col-md-6">
+        <label for="{{ form.apellido.id_for_label }}" class="form-label">Apellidos</label>
+        {{ form.apellido|add_class:'form-control' }}
+        {{ form.apellido.errors }}
+      </div>
+
+      <div class="col-md-6">
+        <label for="{{ form.especialidad.id_for_label }}" class="form-label">Especialidad</label>
+        {{ form.especialidad|add_class:'form-select' }}
+        {{ form.especialidad.errors }}
+      </div>
+
+      <div class="col-md-6">
+        <label for="{{ form.subespecialidad.id_for_label }}" class="form-label">Subespecialidad</label>
+        {{ form.subespecialidad|add_class:'form-select' }}
+        {{ form.subespecialidad.errors }}
+      </div>
+
+      <div class="col-md-12">
+        <label for="{{ form.descripcion.id_for_label }}" class="form-label">Descripción</label>
+        {{ form.descripcion|add_class:'form-control' }}
+        {{ form.descripcion.errors }}
+      </div>
+
+      <div class="col-md-6">
+        <label for="{{ form.telefono.id_for_label }}" class="form-label">Teléfono</label>
+        {{ form.telefono|add_class:'form-control' }}
+        {{ form.telefono.errors }}
+      </div>
+
+      <div class="col-md-6">
+        <label for="{{ form.correo.id_for_label }}" class="form-label">Correo Electrónico</label>
+        {{ form.correo|add_class:'form-control' }}
+        {{ form.correo.errors }}
+      </div>
+
+      <div class="col-md-12 mt-3">
+        <button type="submit" class="btn btn-primary">Agregar Profesional</button>
+      </div>
+    </form>
+  </div>
+{% endblock %}

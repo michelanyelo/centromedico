@@ -33,6 +33,7 @@ class Profesional(models.Model):
     user = models.OneToOneField(
         CustomUser, on_delete=models.CASCADE, null=True, blank=True)
     nombre = models.CharField(max_length=100)
+    apellido = models.CharField(max_length=100) 
     especialidad = models.ForeignKey(Especialidad, on_delete=models.CASCADE)
     subespecialidad = models.ForeignKey(
         Subespecialidad, on_delete=models.CASCADE, null=True, blank=True)

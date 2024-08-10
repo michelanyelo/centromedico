@@ -32,7 +32,7 @@ def add_profesional(request):
         form = ProfesionalForm(request.POST)
         if form.is_valid():
             form.save()
-            return redirect('dashboard_view')
+            return redirect('agregar_profesional')
     else:
         form = ProfesionalForm()
     return render(request, 'dashboard/nuevo_profesional.html', {'form': form})

@@ -3,14 +3,13 @@
 {% block title %}
   <title>Perfil del Profesional</title>
 {% endblock %}
-{% static "armois/css/styles.css" %}
 {% block content %}
   <div class="container my-5">
     <div class="row">
       <div class="col-md-3">
         <div class="card card-profile">
           <div class="card-body text-center">
-            <img src="{% static 'armois/img/profesional3.webp' %}" class="img-fluid rounded-circle mb-3" alt="Doctor" width="250" />
+            <img src="{% static 'armois/img/profesional3.webp' %}" class="img-fluid rounded-circle mb-3" alt="Doctor" />
             <h3 class="card-title">{{ user.first_name }} {{ user.last_name }}</h3>
             <h5 class="card-subtitle mb-2 text-muted">{{ user.username }}</h5>
             {% if user.is_superuser %}
@@ -24,28 +23,34 @@
         </div>
       </div>
       <div class="col-md-9">
-        <div class="card card-profileinfo">
+        <div class="card card-profileinfo bg-white">
           <div class="card-header card-profileinfo-header">
-            <h4>Detalles del Perfil</h4>
+            <h4 class="text-white">Detalles del Perfil</h4>
           </div>
           <div class="card-body">
             <form>
               <div class="mb-3 row">
-                <label for="username" class="col-sm-3 col-form-label">Usuario</label>
+                <label for="username" class="col-sm-2 col-form-label">Usuario: </label>
                 <div class="col-sm-9">
                   <input type="text" readonly class="form-control-plaintext" id="username" value="{{ user.username }}" />
                 </div>
               </div>
               <div class="mb-3 row">
-                <label for="nombre" class="col-sm-3 col-form-label">Nombre</label>
+                <label for="nombre" class="col-sm-2 col-form-label">Nombre: </label>
                 <div class="col-sm-9">
                   <input type="text" readonly class="form-control-plaintext" id="nombre" value="{{ user.first_name }}" />
                 </div>
               </div>
               <div class="mb-3 row">
-                <label for="apellido" class="col-sm-3 col-form-label">Apellido</label>
+                <label for="apellido" class="col-sm-2 col-form-label">Apellido: </label>
                 <div class="col-sm-9">
                   <input type="text" readonly class="form-control-plaintext" id="apellido" value="{{ user.last_name }}" />
+                </div>
+              </div>
+              <div class="mb-3 row">
+                <label for="apellido" class="col-sm-2 col-form-label">Email: </label>
+                <div class="col-sm-9">
+                  <input type="text" readonly class="form-control-plaintext" id="email" value="{{ user.email }}" />
                 </div>
               </div>
             </form>

@@ -1,0 +1,44 @@
+{% extends 'dashboard/layout.html' %}
+{% load static %}
+{% block title %}
+  <title>Agregar Especialidades</title>
+{% endblock %}
+{% block content %}
+  <div class="container mt-4">
+    <h3 id="view-title" class="mb-4">Agregar Especialidad</h3>
+
+    <div id="specialty-form">
+      <form id="form-specialty" method="POST" class="mb-3">
+        {% csrf_token %}
+        <div class="mb-3">
+          <label for="specialty_name" class="form-label">Especialidad:</label>
+          <input type="text" id="specialty_name" name="specialty_name" class="form-control" />
+        </div>
+        <div class="mb-3">
+          <label for="specialty_description" class="form-label">Descripción:</label>
+          <textarea id="specialty_description" name="specialty_description" class="form-control" rows="4"></textarea>
+        </div>
+        <button type="submit" class="btn btn-primary">Agregar Especialidad</button>
+      </form>
+      <button id="add-subspecialty-btn" class="btn btn-secondary">Ir al Formulario de Subespecialidad</button>
+    </div>
+
+    <div id="subspecialty-form" style="display: none;">
+      <form id="form-subspecialty" method="POST" class="mb-3">
+        {% csrf_token %}
+        <div class="mb-3">
+          <label for="specialty" class="form-label">Especialidad:</label>
+          <select id="specialty" name="specialty" class="form-select"></select>
+        </div>
+        <div class="mb-3">
+          <label for="sub_name" class="form-label">Subespecialidad:</label>
+          <input type="text" id="sub_name" name="sub_name" class="form-control" />
+        </div>
+        <button type="submit" class="btn btn-primary">Agregar Subespecialidad</button>
+      </form>
+      <button type="button" class="btn btn-secondary" id="back-to-specialty-btn">Volver al Formulario de Especialidad</button>
+    </div>
+  </div>
+
+  <script src="{% static 'dashboard/js/specialty.js' %}"></script>
+{% endblock %}

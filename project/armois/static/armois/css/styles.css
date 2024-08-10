@@ -538,17 +538,3 @@ legend {
     left: 0;
     white-space: nowrap;
 }
-
-/* PROFILE */
-.card-profile {
-    background-color: var(--card-background);
-}
-
-.card-profileinfo {
-    background-color: var(--default);
-}
-
-.card-profileinfo-header {
-    background-color: var(--card-highlight);
-    color: var(--default);
-}

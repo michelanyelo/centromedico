@@ -1,5 +1,5 @@
 from django import forms
-from armois.models import HorarioAtencion, Profesional
+from armois.models import HorarioAtencion, Profesional, Especialidad
 
 
 class HorarioAtencionForm(forms.ModelForm):
@@ -13,3 +13,9 @@ class ProfesionalForm(forms.ModelForm):
         model = Profesional
         fields = ['nombre', 'apellido', 'especialidad',
                   'subespecialidad', 'descripcion', 'telefono', 'correo']
+
+
+class EspecialidadForm(forms.ModelForm):
+    class Meta:
+        model = Especialidad
+        fields = ['nombre', 'descripcion']

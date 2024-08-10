@@ -59,7 +59,7 @@ const listarProfesionalesConSubesp = async (idSubEspecialidad) => {
         if (data.message === "Success") {
             let opciones = "";
             data.profesional_subesp.forEach((profesional) => {
-                opciones += `<option value="${profesional.id}">${profesional.nombre}</option>`;
+                opciones += `<option value="${profesional.id}">${profesional.nombre} ${profesional.apellido}</option>`;
             });
             cboProfesional.innerHTML = opciones;
             // Seleccionar automáticamente el primer profesional
@@ -83,7 +83,7 @@ const listarProfesionalesSinSubesp = async (idEspecialidad) => {
         if (data.message === "Success") {
             let opciones = "";
             data.profesionales_sin_subesp.forEach((profesional) => {
-                opciones += `<option value="${profesional.id}">${profesional.nombre}</option>`;
+                opciones += `<option value="${profesional.id}">${profesional.nombre} ${profesional.apellido}</option>`;
             });
             cboProfesional.innerHTML = opciones;
             // Seleccionar automáticamente el primer profesional

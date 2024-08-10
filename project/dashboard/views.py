@@ -1,7 +1,7 @@
 from django.http import JsonResponse
 from django.shortcuts import render, redirect
 from armois.models import HorarioAtencion, Profesional, Especialidad, Subespecialidad
-from .forms import HorarioAtencionForm, ProfesionalForm, EspecialidadForm
+from .forms import ProfesionalForm, EspecialidadForm
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import authenticate, login, logout
 from googlecalendar import google_calendar_class as gc
@@ -17,13 +17,21 @@ def dashboard_view(request):
 @login_required
 def add_horario(request):
     if request.method == 'POST':
-        form = HorarioAtencionForm(request.POST)
-        if form.is_valid():
-            form.save()
-            return redirect('dashboard_view')
+        profesional_id = request.POST.get('profesional')
+        fecha = request.POST.get('fecha')
+        hora_inicio = request.POST.get('hora_inicio')
+        hora_fin = request.POST.get('hora_fin')
+        profesional = Profesional.objects.get(id=profesional_id)
+        horario = HorarioAtencion(
+            profesional=profesional,
+            fecha=fecha,
+            hora_inicio=hora_inicio,
+            hora_fin=hora_fin
+        )
+        horario.save()
+        return redirect('agregar_horario')  # Redirige a una URL de éxito
     else:
-        form = HorarioAtencionForm()
-    return render(request, 'dashboard/add_horario.html', {'form': form})
+        return render(request, 'dashboard/nuevo_horario.html', {'profesionales': Profesional.objects.all()})
 
 
 @login_required
@@ -52,7 +60,7 @@ def add_especialidad(request):
             specialty = Especialidad.objects.create(
                 nombre=specialty_name, descripcion=specialty_description)
             return JsonResponse({'status': 'success', 'message': 'Especialidad creada con éxito.'})
-        
+
         elif specialty_id and sub_name:
             # Capitalizar el nombre de la subespecialidad y concatenar con el nombre de la especialidad
             sub_name = sub_name.title()
@@ -64,13 +72,11 @@ def add_especialidad(request):
                 return JsonResponse({'status': 'success', 'message': 'Subespecialidad creada con éxito.'})
             except Especialidad.DoesNotExist:
                 return JsonResponse({'status': 'error', 'message': 'Especialidad no encontrada.'})
-        
+
         else:
             return JsonResponse({'status': 'error', 'message': 'Datos insuficientes para crear especialidad o subespecialidad.'})
 
     return render(request, 'dashboard/nueva_especialidad.html')
-
-
 
 
 def get_especialidad(request):

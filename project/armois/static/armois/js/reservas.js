@@ -127,7 +127,7 @@ const listarHorariosDisponibles = async (profesionalId) => {
                 } else {
                     dia_completo = numeroDia
                 }
-                opciones += `<option value="${horario.id}" data-fecha="${dia_completo}/${mes_completo}/${fecha.getFullYear()}/${horario.hora_inicio}/${horario.hora_fin}">${diaSemanaCapitalizado} ${numeroDia} desde las ${horario.hora_inicio} a las ${horario.hora_fin}</option>`;
+                opciones += `<option value="${horario.id}" data-fecha="${dia_completo}/${mes_completo}/${fecha.getFullYear()}/${horario.hora_inicio}/${horario.hora_fin}">${diaSemanaCapitalizado} ${dia_completo}/${mes_completo}/${fecha.getFullYear()} : ${horario.hora_inicio} - ${horario.hora_fin}</option>`;
             });
             cboHorario.innerHTML = ""; // Limpiar las opciones existentes
             cboHorario.innerHTML = opciones; // Agregar las nuevas opciones
@@ -170,7 +170,6 @@ const cargaInicial = async () => {
         } else {
             // Si se selecciona un horario disponible, continuar con el proceso
             const fechaSeleccionada = cboHorario.options[cboHorario.selectedIndex].getAttribute("data-fecha");
-            console.log("Fecha seleccionada:", fechaSeleccionada); // Verificar el valor en la consola
             const [dia, mes, anio, hora_inicio, hora_fin] = fechaSeleccionada.split('/');
             document.getElementById("dia").value = dia;
             document.getElementById("mes").value = mes;

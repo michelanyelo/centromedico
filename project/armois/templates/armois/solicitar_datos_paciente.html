@@ -9,8 +9,8 @@
     <form id="datosPacienteForm" class="formulario-reserva mt-5" method="post" action="{% url 'reservas_a_calendario' %}">
       {% csrf_token %}
       <fieldset>
-        <legend class="legend-profesional">Ingresa tus datos para atenderte con {{ nombre_profesional }}</legend>
-        <legend class="legend-datos">El día {{ dia }} de {{ mes_nombre }}, a partir de las {{ hora_inicio }} hasta las {{ hora_fin }}</legend>
+        <legend class="legend-profesional">Ingresa tus datos para atenderte con {{ nombre_profesional }} {{ apellido_profesional }}</legend>
+        <legend class="legend-datos">El día {{ dia }} de {{ mes_nombre }} del {{anio}}, a partir de las {{ hora_inicio }} hasta las {{ hora_fin }}</legend>
         {% comment %} <div class="mb-3">
           <label for="inputRutPaciente" class="form-label">Rut:</label>
           <input class="form-control" type="text" id="inputRutPaciente" />

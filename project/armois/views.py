@@ -106,9 +106,9 @@ def get_horarios_disponibles(request, profesional_id):
 
 def reservas(request):
     if request.method == 'POST':
-        # summary = "Psicología(Psicología Infanto Juvenil) - Camila Maulén"
         id_profesional = request.POST.get('cboProfesional')
         nombre_profesional = Profesional.objects.get(id=id_profesional).nombre
+        apellido_profesional = Profesional.objects.get(id=id_profesional).apellido
         dia = request.POST.get('dia')
         mes_numero = request.POST.get('mes')
         anio = request.POST.get('anio')
@@ -139,6 +139,7 @@ def reservas(request):
         return render(request, "armois/solicitar_datos_paciente.html/", {
             "id_profesional": id_profesional,
             "nombre_profesional": nombre_profesional,
+            "apellido_profesional": apellido_profesional,
             "dia": dia,
             "mes_numero": mes_numero,
             "mes_nombre": mes_nombre,

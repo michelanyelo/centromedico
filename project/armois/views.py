@@ -2,7 +2,7 @@ from django.shortcuts import render
 from django.http import HttpResponseRedirect, JsonResponse
 from django.shortcuts import redirect, render
 from django.urls import reverse
-from .models import Especialidad, Subespecialidad, Profesional, HorarioAtencion
+from .models import Especialidad, Subespecialidad, Profesional, HorarioAtencion, Paciente, Reserva
 from googlecalendar import google_calendar_class as gc
 from datetime import datetime, timedelta, timezone
 from django.contrib.auth.decorators import login_required
@@ -93,7 +93,7 @@ def get_prof_sin_subesp(request, especialidad_id):
 
 
 def get_horarios_disponibles(request, profesional_id):
-    horarios = HorarioAtencion.objects.filter(profesional_id=profesional_id)
+    horarios = HorarioAtencion.objects.filter(profesional_id=profesional_id, is_available = True)
     if horarios.exists():
         data = {
             "message": "Success",
@@ -202,6 +202,21 @@ def reservas_a_calendario(request):
                                       str(hora_final),
                                       timezone,
                                       attendees)
+        
+        nuevo_paciente = Paciente(
+            nombre=nombre_paciente,
+            correo=correo_paciente,
+            sexo=sexo_paciente,
+            direccion=direccion_paciente,
+            telefono=telefono_paciente
+        )
+        nuevo_paciente.save()
+        
+        # nueva_reserva = Reserva(
+        #     fecha_hora_inicio=hora_inicio,
+        #     fecha_hora_final=hora_final,
+        #     profesional_id=profesional_id,
+        # )
 
         # Redirigir a una página de éxito o renderizar una plantilla de éxito
         request.session['show_alert'] = True

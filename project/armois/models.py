@@ -33,7 +33,7 @@ class Profesional(models.Model):
     user = models.OneToOneField(
         CustomUser, on_delete=models.CASCADE, null=True, blank=True)
     nombre = models.CharField(max_length=100)
-    apellido = models.CharField(max_length=100) 
+    apellido = models.CharField(max_length=100)
     especialidad = models.ForeignKey(Especialidad, on_delete=models.CASCADE)
     subespecialidad = models.ForeignKey(
         Subespecialidad, on_delete=models.CASCADE, null=True, blank=True)
@@ -55,6 +55,8 @@ class Paciente(models.Model):
     rut = models.CharField(max_length=12)
     telefono = models.CharField(max_length=15)
     correo = models.EmailField()
+    sexo = models.CharField(max_length=20)
+    direccion = models.CharField(max_length=100)
 
     def __str__(self):
         return self.nombre
@@ -65,6 +67,7 @@ class HorarioAtencion(models.Model):
     fecha = models.DateField()
     hora_inicio = models.TimeField()
     hora_fin = models.TimeField()
+    is_available = models.BooleanField(default=True)
 
     def __str__(self):
         return f"{self.profesional.nombre} - {self.fecha} {self.hora_inicio}-{self.hora_fin}"
@@ -75,26 +78,14 @@ class HorarioAtencion(models.Model):
             raise ValidationError(
                 "La hora de inicio debe ser anterior a la hora de finalización.")
 
-        # Verificar si ya existe un horario de atención para el mismo profesional, día y horario
-        existentes = HorarioAtencion.objects.filter(
-            profesional=self.profesional,
-            fecha=self.fecha,
-            hora_inicio__lte=self.hora_fin,
-            hora_fin__gte=self.hora_inicio
-        )
-        if existentes.exists():
-            raise ValidationError(f"Ya existe un horario de atención para {
-                                  self.profesional.nombre} el día {self.fecha} de {self.hora_inicio} a {self.hora_fin}.")
 
-    @classmethod
-    def is_hora_disponible(cls, profesional, fecha, hora_inicio, hora_fin):
-        """
-        Verifica si una hora está disponible para un profesional en un día específico.
-        """
-        existentes = cls.objects.filter(
-            profesional=profesional,
-            fecha=fecha,
-            hora_inicio__lte=hora_fin,
-            hora_fin__gte=hora_inicio
-        )
-        return not existentes.exists()
+class Reserva(models.Model):
+    horario = models.ForeignKey(HorarioAtencion, on_delete=models.CASCADE)
+    paciente = models.ForeignKey(Paciente, on_delete=models.CASCADE)
+    fecha_reserva = models.DateTimeField(auto_now_add=True)
+    google_calendar_event_id = models.CharField(
+        max_length=255, blank=True, null=True)
+    is_synced_with_google_calendar = models.BooleanField(default=False)
+
+    def __str__(self):
+        return f"Reserva de {self.paciente.nombre} con {self.horario.profesional.nombre} el {self.horario.fecha} a las {self.horario.hora_inicio} - {self.horario.hora_fin}"

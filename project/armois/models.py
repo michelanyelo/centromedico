@@ -70,7 +70,7 @@ class HorarioAtencion(models.Model):
     is_available = models.BooleanField(default=True)
 
     def __str__(self):
-        return f"{self.id} - {self.profesional.nombre} - {self.fecha} {self.hora_inicio}-{self.hora_fin}"
+        return f"{self.profesional.nombre} - {self.fecha} {self.hora_inicio}-{self.hora_fin}"
 
     def clean(self):
         # Validar que la hora de inicio sea anterior a la hora de finalización
@@ -86,4 +86,4 @@ class Reserva(models.Model):
     is_synced_with_google_calendar = models.BooleanField(default=False)
 
     def __str__(self):
-        return f"Reserva de {self.paciente.nombre} con {self.horario.profesional.nombre} el {self.horario.fecha} a las {self.horario.hora_inicio} - {self.horario.hora_fin}"
+        return f"Reserva de {self.paciente.nombre} con {self.horario.profesional.nombre} el {self.horario.fecha} desde las {self.horario.hora_inicio} hasta las {self.horario.hora_fin}"

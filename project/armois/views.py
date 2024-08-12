@@ -168,7 +168,7 @@ def reservas_a_calendario(request):
         direccion_paciente = request.POST.get('inputDireccion')
         telefono_paciente = request.POST.get('inputTelefono')
         horario_id = request.POST.get('id_horario_atencion')
-        horario_atencion = HorarioAtencion.objects.get(id=int(horario_id))
+        
 
         # Obtener los datos del profesional
         profesional_id = request.POST.get('id_profesional')
@@ -219,6 +219,7 @@ def reservas_a_calendario(request):
         )
         nuevo_paciente.save()
 
+        horario_atencion = HorarioAtencion.objects.get(id=int(horario_id))
         # Crear y guardar la reserva
         nueva_reserva = Reserva(
             horario=horario_atencion,
@@ -226,6 +227,10 @@ def reservas_a_calendario(request):
             is_synced_with_google_calendar=True
         )
         nueva_reserva.save()
+        
+         # Marcar el horario como no disponible
+        horario_atencion.is_available = False
+        horario_atencion.save()
 
         # Redirigir a una página de éxito o renderizar una plantilla de éxito
         request.session['show_alert'] = True

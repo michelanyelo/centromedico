@@ -17,11 +17,11 @@
         </div> {% endcomment %}
         <div class="mb-3">
           <label for="inputNombrePaciente" class="form-label">Nombre completo:</label>
-          <input class="form-control" type="text" id="inputNombrePaciente" name="inputNombrePaciente" />
+          <input class="form-control" type="text" id="inputNombrePaciente" name="inputNombrePaciente" required/>
         </div>
         <div class="mb-3">
           <label for="inputCorreoPaciente">Correo electrónico:</label>
-          <input id="inputCorreoPaciente" name="inputCorreoPaciente" class="form-control" type="email" />
+          <input id="inputCorreoPaciente" name="inputCorreoPaciente" class="form-control" type="email" required/>
         </div>
         <div class="mb-3">
           <label for="radioSexo">Sexo:</label>
@@ -44,11 +44,11 @@
         </div>
         <div class="mb-3">
           <label for="inputDireccion">Dirección:</label>
-          <input id="inputDireccion" name="inputDireccion" class="form-control" type="text" />
+          <input id="inputDireccion" name="inputDireccion" class="form-control" type="text" required/>
         </div>
         <div class="mb-3">
           <label for="inputTelefono">Teléfono/Celular:</label>
-          <input id="inputTelefono" name="inputTelefono" class="form-control" type="text" />
+          <input id="inputTelefono" name="inputTelefono" class="form-control" type="text" required/>
         </div>
 
         <input type="hidden" id="fecha_hora_inicio" name="fecha_hora_inicio" value="{{ fecha_hora_inicio }}" />

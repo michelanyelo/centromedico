@@ -1,98 +1,38 @@
 {% load static %}
-<nav class="navbar navbar-expand-lg bg-body-tertiary">
-  <div class="container-fluid">
-    <a class="navbar-brand" href="{% url 'dashboard' %}"><img src="{% static 'armois/img/logo.png' %}" alt="LOGO" width="150" /></a>
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
-    <div class="collapse navbar-collapse" id="navbarSupportedContent">
-      <ul class="navbar-nav me-auto mb-2 mb-lg-0 justify-content-center">
-        <li class="nav-item">
-          <a class="nav-link" href="{% url 'dashboard' %}">Dashboard</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="{% url 'agregar_especialidad' %}">Nueva Especialidad</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="{% url 'agregar_profesional' %}">Nuevo Profesional</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="{% url 'agregar_horario' %}">Nuevo Horario</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="{% url 'listar_reservas' %}">Ver Atenciones</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="{% url 'profile' %}">Ver Perfil</a>
-        </li>
-      </ul>
-      <ul class="navbar-nav ms-auto">
-        {% if user.is_authenticated %}
-          <li class="nav-item">
-            <a class="nav-link btn btn-reserva text-uppercase ms-0 ms-lg-2" href="{% url 'logout' %}" role="button">Desconectarse</a>
-          </li>
-        {% endif %}
-      </ul>
-    </div>
-  </div>
-</nav>
-
 <header>
-  <div class="px-3 py-2 text-bg-dark border-bottom">
-    <div class="container">
-      <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
-        <a href="/" class="d-flex align-items-center my-2 my-lg-0 me-lg-auto text-white text-decoration-none">
-          <svg class="bi me-2" width="40" height="32" role="img" aria-label="Bootstrap">
-            <use xlink:href="#bootstrap"></use>
-          </svg>
-        </a>
-
-        <ul class="nav col-12 col-lg-auto my-2 justify-content-center my-md-0 text-small">
-          <li>
-            <a href="#" class="nav-link text-secondary">
-              <i class="bi bi-house-door d-block mx-auto mb-1"></i>Home
-            </a>
+  <nav class="navbar bg-dark navbar-expand-lg" data-bs-theme="dark">
+    <div class="container-fluid">
+      <a class="navbar-brand" href="{% url 'dashboard' %}"><img src="{% static 'armois/img/logo.png' %}" alt="LOGO" width="150" /></a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0 justify-content-center">
+          <li class="nav-item text-center">
+            <a class="nav-link" href="{% url 'dashboard' %}"><i class="bi bi-speedometer2 d-block mb-1 fs-5"></i>Dashboard</a>
           </li>
-          <li>
-            <a href="#" class="nav-link text-white">
-              <svg class="bi d-block mx-auto mb-1" width="24" height="24">
-                <use xlink:href="#speedometer2"></use>
-              </svg>Dashboard
-            </a>
+          <li class="nav-item text-center">
+            <a class="nav-link" href="{% url 'agregar_especialidad' %}"><i class="bi bi-clipboard-plus d-block mb-1 fs-5"></i>Nueva Especialidad</a>
           </li>
-          <li>
-            <a href="#" class="nav-link text-white">
-              <svg class="bi d-block mx-auto mb-1" width="24" height="24">
-                <use xlink:href="#table"></use>
-              </svg>Orders
-            </a>
+          <li class="nav-item text-center">
+            <a class="nav-link" href="{% url 'agregar_profesional' %}"><i class="bi bi-person-plus d-block mb-1 fs-5"></i>Nuevo Profesional</a>
           </li>
-          <li>
-            <a href="#" class="nav-link text-white">
-              <svg class="bi d-block mx-auto mb-1" width="24" height="24">
-                <use xlink:href="#grid"></use>
-              </svg>Products
-            </a>
+          <li class="nav-item text-center">
+            <a class="nav-link" href="{% url 'agregar_horario' %}"><i class="bi bi-calendar-plus d-block mb-1 fs-5"></i>Nuevo Horario</a>
           </li>
-          <li>
-            <a href="#" class="nav-link text-white">
-              <svg class="bi d-block mx-auto mb-1" width="24" height="24">
-                <use xlink:href="#people-circle"></use>
-              </svg>Customers
-            </a>
+          <li class="nav-item text-center">
+            <a class="nav-link" href="{% url 'listar_reservas' %}"><i class="bi bi-clock-history d-block mb-1 fs-5"></i>Ver Atenciones</a>
           </li>
+          <li class="nav-item text-center">
+            <a class="nav-link" href="{% url 'profile' %}"><i class="bi bi-person d-block mb-1 fs-5"></i>Ver Perfil</a>
+          </li>
+        </ul>
+        <ul class="navbar-nav ms-auto">
+          {% if user.is_authenticated %}
+            <li class="nav-item">
+              <a class="nav-link btn btn-reserva text-uppercase ms-0 ms-lg-2" href="{% url 'logout' %}" role="button">Desconectarse</a>
+            </li>
+          {% endif %}
         </ul>
       </div>
     </div>
-  </div>
-  <div class="px-3 py-2 border-bottom mb-3">
-    <div class="container d-flex flex-wrap justify-content-center">
-      <form class="col-12 col-lg-auto mb-2 mb-lg-0 me-lg-auto" role="search">
-        <input type="search" class="form-control" placeholder="Search..." aria-label="Search" />
-      </form>
-
-      <div class="text-end">
-        <button type="button" class="btn btn-light text-dark me-2">Login</button>
-        <button type="button" class="btn btn-primary">Sign-up</button>
-      </div>
-    </div>
-  </div>
+  </nav>
 </header>

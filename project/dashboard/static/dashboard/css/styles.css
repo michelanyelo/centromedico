@@ -34,17 +34,14 @@ nav {
     padding: 10px 0;
 }
 
-nav .nav-link,
-footer .nav-link {
-
-    font-size: 15px;
+nav .nav-link{
+    font-size: 0.9rem;
 }
 
 footer .nav-link {
     color: white;
 }
 
-nav .nav-link:hover,
 footer .nav-link:hover {
     color: #97B1AB;
 }

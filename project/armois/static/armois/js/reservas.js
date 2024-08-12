@@ -176,6 +176,7 @@ const cargaInicial = async () => {
             document.getElementById("anio").value = anio;
             document.getElementById("hora_inicio").value = hora_inicio;
             document.getElementById("hora_fin").value = hora_fin;
+            
         }
     });
 };

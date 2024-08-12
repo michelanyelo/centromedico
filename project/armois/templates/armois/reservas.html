@@ -1,3 +1,4 @@
+<!-- formulario seleccionar_reserva.html -->
 {% extends 'armois/layout.html' %}
 {% load static %}
 {% block title %}
@@ -16,16 +17,17 @@
         </div>
         <div class="mb-3">
           <label for="cboSubespecialidad" id="subespecialidadLabel">Subespecialidad:</label>
-          <select id="cboSubEspecialidad" class="form-select" aria-label="Subspecialidad Select"></select>
+          <select id="cboSubEspecialidad" class="form-select" aria-label="Subespecialidad Select"></select>
         </div>
         <div class="mb-3">
           <label for="cboProfesional" id="profesionalLabel">Profesional:</label>
           <select id="cboProfesional" class="form-select" aria-label="Profesional Select" name="cboProfesional" required></select>
         </div>
-        <!-- Otros campos del formulario para la cita -->
         <div class="mb-3">
           <label for="cboHorario" id="horarioLabel">Horario:</label>
-          <select id="cboHorario" class="form-select" aria-label="Horario Select" name="horario" required></select>
+          <select id="cboHorario" class="form-select" aria-label="Horario Select" name="horario" required>
+            <!-- Opciones de horarios -->
+          </select>
         </div>
 
         <input type="hidden" id="dia" name="dia" value="" />
@@ -33,6 +35,7 @@
         <input type="hidden" id="anio" name="anio" value="" />
         <input type="hidden" id="hora_inicio" name="hora_inicio" value="" />
         <input type="hidden" id="hora_fin" name="hora_fin" value="" />
+        <input type="hidden" id="id_horario_atencion" name="id_horario_atencion" value="" /> <!-- Nuevo campo oculto -->
 
         <button type="submit" class="btn btn-primary" value="agendar_profesional">Ir a datos personales</button>
       </fieldset>
@@ -48,17 +51,21 @@
 
   <script src="{% static 'armois/js/reservas.js' %}"></script>
   <script>
+    // Evento correcto para el select
+    document.getElementById('cboHorario').addEventListener("change", function(){
+      const horarioId = document.getElementById('cboHorario').value;
+      document.getElementById('id_horario_atencion').value = horarioId;
+    });
+  
     document.addEventListener('DOMContentLoaded', function () {
       const showAlert = {{ show_alert|yesno:"true,false" }};
-      const cardContainer = document.querySelector('.card-container');
       const alertMessage = document.getElementById('alertMessage');
-
-      if (showAlert) {
+  
+      if (showAlert && alertMessage) {
         // Mostrar la alerta
-        if (alertMessage) {
-          alertMessage.style.display = 'block';
-        }
+        alertMessage.style.display = 'block';
       }
     });
   </script>
+  
 {% endblock %}

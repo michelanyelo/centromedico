@@ -10,7 +10,7 @@
       {% csrf_token %}
       <fieldset>
         <legend class="legend-profesional">Ingresa tus datos para atenderte con {{ nombre_profesional }} {{ apellido_profesional }}</legend>
-        <legend class="legend-datos">El día {{ dia }} de {{ mes_nombre }} del {{anio}}, a partir de las {{ hora_inicio }} hasta las {{ hora_fin }}</legend>
+        <legend class="legend-datos">El día {{ dia }} de {{ mes_nombre }} del {{ anio }}, a partir de las {{ hora_inicio }} hasta las {{ hora_fin }}</legend>
         {% comment %} <div class="mb-3">
           <label for="inputRutPaciente" class="form-label">Rut:</label>
           <input class="form-control" type="text" id="inputRutPaciente" />
@@ -26,19 +26,19 @@
         <div class="mb-3">
           <label for="radioSexo">Sexo:</label>
           <div class="form-check">
-            <input class="form-check-input" type="radio" name="radioSexo" id="sexoMasculino" value="Masculino"/>
+            <input class="form-check-input" type="radio" name="radioSexo" id="sexoMasculino" value="Masculino" />
             <label class="form-check-label" for="sexoMasculino">Masculino</label>
           </div>
           <div class="form-check">
-            <input class="form-check-input" type="radio" name="radioSexo" id="sexoFemenino" value="Femenino"/>
+            <input class="form-check-input" type="radio" name="radioSexo" id="sexoFemenino" value="Femenino" />
             <label class="form-check-label" for="sexoFemenino">Femenino</label>
           </div>
           <div class="form-check">
-            <input class="form-check-input" type="radio" name="radioSexo" id="sexoNoBinario" value="No binario"/>
+            <input class="form-check-input" type="radio" name="radioSexo" id="sexoNoBinario" value="No binario" />
             <label class="form-check-label" for="sexoNoBinario">No binario/a/e</label>
           </div>
           <div class="form-check">
-            <input class="form-check-input" type="radio" name="radioSexo" id="sexoOtro" value="Otro"/>
+            <input class="form-check-input" type="radio" name="radioSexo" id="sexoOtro" value="Otro" />
             <label class="form-check-label" for="sexoOtro">Prefiero no especificar</label>
           </div>
         </div>
@@ -55,6 +55,7 @@
         <input type="hidden" id="fecha_hora_final" name="fecha_hora_final" value="{{ fecha_hora_final }}" />
         <input type="hidden" id="id_profesional" name="id_profesional" value="{{ id_profesional }}" />
         <input type="hidden" id="nombre_profesional" name="nombre_profesional" value="{{ nombre_profesional }}" />
+        <input type="hidden" id="id_horario_atencion" name="id_horario_atencion" value="{{ id_horario }}" />
 
         <button type="submit" class="btn btn-primary" value="agendar_paciente">Agendar</button>
       </fieldset>

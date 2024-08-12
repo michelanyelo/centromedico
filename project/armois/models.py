@@ -70,7 +70,7 @@ class HorarioAtencion(models.Model):
     is_available = models.BooleanField(default=True)
 
     def __str__(self):
-        return f"{self.profesional.nombre} - {self.fecha} {self.hora_inicio}-{self.hora_fin}"
+        return f"{self.id} - {self.profesional.nombre} - {self.fecha} {self.hora_inicio}-{self.hora_fin}"
 
     def clean(self):
         # Validar que la hora de inicio sea anterior a la hora de finalización
@@ -83,8 +83,6 @@ class Reserva(models.Model):
     horario = models.ForeignKey(HorarioAtencion, on_delete=models.CASCADE)
     paciente = models.ForeignKey(Paciente, on_delete=models.CASCADE)
     fecha_reserva = models.DateTimeField(auto_now_add=True)
-    google_calendar_event_id = models.CharField(
-        max_length=255, blank=True, null=True)
     is_synced_with_google_calendar = models.BooleanField(default=False)
 
     def __str__(self):

@@ -93,7 +93,8 @@ def get_prof_sin_subesp(request, especialidad_id):
 
 
 def get_horarios_disponibles(request, profesional_id):
-    horarios = HorarioAtencion.objects.filter(profesional_id=profesional_id, is_available = True)
+    horarios = HorarioAtencion.objects.filter(
+        profesional_id=profesional_id, is_available=True)
     if horarios.exists():
         data = {
             "message": "Success",
@@ -107,8 +108,10 @@ def get_horarios_disponibles(request, profesional_id):
 def reservas(request):
     if request.method == 'POST':
         id_profesional = request.POST.get('cboProfesional')
+        id_horario = request.POST.get('id_horario_atencion')
         nombre_profesional = Profesional.objects.get(id=id_profesional).nombre
-        apellido_profesional = Profesional.objects.get(id=id_profesional).apellido
+        apellido_profesional = Profesional.objects.get(
+            id=id_profesional).apellido
         dia = request.POST.get('dia')
         mes_numero = request.POST.get('mes')
         anio = request.POST.get('anio')
@@ -147,7 +150,8 @@ def reservas(request):
             "hora_inicio": hora_inicio,
             "hora_fin": hora_fin,
             "fecha_hora_inicio": fecha_hora_inicio,
-            "fecha_hora_final": fecha_hora_final
+            "fecha_hora_final": fecha_hora_final,
+            "id_horario" : id_horario
         })
     else:
         # Renderizar el formulario de selección de horario
@@ -163,6 +167,8 @@ def reservas_a_calendario(request):
         sexo_paciente = request.POST.get('radioSexo')
         direccion_paciente = request.POST.get('inputDireccion')
         telefono_paciente = request.POST.get('inputTelefono')
+        horario_id = request.POST.get('id_horario_atencion')
+        horario_atencion = HorarioAtencion.objects.get(id=int(horario_id))
 
         # Obtener los datos del profesional
         profesional_id = request.POST.get('id_profesional')
@@ -198,11 +204,12 @@ def reservas_a_calendario(request):
 
         calendar_manager = gc.GoogleCalendarManager()
         calendar_manager.create_event(str(summary),
-                                      str(hora_inicio),
-                                      str(hora_final),
-                                      timezone,
-                                      attendees)
-        
+                                                 str(hora_inicio),
+                                                 str(hora_final),
+                                                 timezone,
+                                                 attendees)
+
+        # Crear y guardar el nuevo paciente
         nuevo_paciente = Paciente(
             nombre=nombre_paciente,
             correo=correo_paciente,
@@ -211,12 +218,14 @@ def reservas_a_calendario(request):
             telefono=telefono_paciente
         )
         nuevo_paciente.save()
-        
-        # nueva_reserva = Reserva(
-        #     fecha_hora_inicio=hora_inicio,
-        #     fecha_hora_final=hora_final,
-        #     profesional_id=profesional_id,
-        # )
+
+        # Crear y guardar la reserva
+        nueva_reserva = Reserva(
+            horario=horario_atencion,
+            paciente=nuevo_paciente,
+            is_synced_with_google_calendar=True
+        )
+        nueva_reserva.save()
 
         # Redirigir a una página de éxito o renderizar una plantilla de éxito
         request.session['show_alert'] = True
@@ -231,7 +240,6 @@ def reservas_a_calendario(request):
 #     calendar_manager = gc.GoogleCalendarManager()
 #     events = calendar_manager.list_upcoming_events()
 #     return render(request, 'armois/listar_reservas.html', {'events': events})
-
 
 
 def dashboard(request):

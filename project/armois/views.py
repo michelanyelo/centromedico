@@ -18,27 +18,6 @@ def index(request):
     return render(request, "armois/index.html")
 
 
-# specialty tab
-def especialidad(request):
-    especialidades = Especialidad.objects.all().order_by("nombre")
-    letras = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
-    return render(
-        request,
-        "armois/especialidades.html",
-        {"especialidades": especialidades, "letras": letras},
-    )
-
-
-def detalle_especialidad(request, especialidad_id):
-    especialidad = Especialidad.objects.get(id=especialidad_id)
-    subespecialidades = especialidad.subespecialidades.all()
-    return render(
-        request,
-        "armois/especialidad_detalle.html",
-        {"especialidad": especialidad, "subespecialidades": subespecialidades},
-    )
-
-
 def get_especialidad(request):
     especialidad = list(Especialidad.objects.values())
     if len(especialidad) > 0:

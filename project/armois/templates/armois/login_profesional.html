@@ -21,7 +21,7 @@
         </div>
         <div class="blmd-continer">
           <!-- @ Login form container -->
-          <form id="login-form" method="POST" action="{% url 'login' %}" onsubmit="mostrarDatos(event)">
+          <form id="login-form" method="POST" action="{% url 'login' %}">
             {% csrf_token %}
             <h1 class="text-center">Inicia sesión</h1>
             {% if message %}
@@ -76,21 +76,5 @@
       </div>
     </div>
   </div>
-  <script>
-    function mostrarDatos(event) {
-      event.preventDefault() // Evita que el formulario se envíe inmediatamente
-    
-      var username = document.getElementById('usernameLogin').value
-      var password = document.getElementById('passwordLogin').value
-    
-      // Validaciones básicas
-      if (!username || !password) {
-        alert('Por favor, complete todos los campos.')
-        return
-      }
-      // Enviar el formulario después de mostrar el alert
-      event.target.submit()
-    }
-  </script>
   <script src="{% static 'armois/js/login.js' %}"></script>
 {% endblock %}

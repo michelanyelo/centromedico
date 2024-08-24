@@ -1,4 +1,21 @@
 $(document).ready(function () {
+  // Manejo del form login
+  form = document.getElementById('login-form');
+  form.addEventListener('submit', function (event) {
+    event.preventDefault() // Evita que el formulario se envíe inmediatamente
+
+    var username = document.getElementById('usernameLogin').value
+    var password = document.getElementById('passwordLogin').value
+
+    // Validaciones básicas
+    if (!username || !password) {
+      alert('Por favor, complete todos los campos.')
+      return
+    }
+    // Enviar el formulario después de mostrar el alert
+    event.target.submit()
+  })
+
   // Maneja el clic en el botón de alternancia
   $('.blmd-switch-button').on('click', function () {
     // Alterna las clases de visibilidad entre el formulario de inicio de sesión y el de registro

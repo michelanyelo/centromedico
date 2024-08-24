@@ -199,10 +199,12 @@ def reservas_a_calendario(request):
         nuevo_paciente.save()
 
         horario_atencion = HorarioAtencion.objects.get(id=int(horario_id))
+        profesional = Profesional.objects.get(id=int(profesional_id))
         # Crear y guardar la reserva
         nueva_reserva = Reserva(
             horario=horario_atencion,
             paciente=nuevo_paciente,
+            profesional=profesional,
             is_synced_with_google_calendar=True
         )
         nueva_reserva.save()

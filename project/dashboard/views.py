@@ -1,17 +1,11 @@
 from django.http import JsonResponse
 from django.shortcuts import render, redirect
-from armois.models import HorarioAtencion, Profesional, Especialidad, Subespecialidad
+from armois.models import HorarioAtencion, Profesional, Especialidad, Subespecialidad, Reserva
 from .forms import ProfesionalForm, EspecialidadForm
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import authenticate, login, logout
 from googlecalendar import google_calendar_class as gc
 from datetime import datetime, timedelta, timezone
-
-
-def dashboard_view(request):
-    horarios = HorarioAtencion.objects.all()
-    profesionales = Profesional.objects.all()
-    return render(request, 'dashboard/dashboard.html', {'horarios': horarios, 'profesionales': profesionales})
 
 
 @login_required
@@ -101,3 +95,8 @@ def listar_reservas(request):
                 event['end']['dateTime'], '%Y-%m-%dT%H:%M:%S%z')
 
     return render(request, 'dashboard/listar_reservas.html', {'events': events})
+
+@login_required
+def crud_reservas(request):
+    reservas = Reserva.objects.all()
+    return render(request, 'dashboard/dashboard.html', {'reservas': reservas})

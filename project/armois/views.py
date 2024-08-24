@@ -226,10 +226,6 @@ def reservas_a_calendario(request):
 #     return render(request, 'armois/listar_reservas.html', {'events': events})
 
 
-def dashboard(request):
-    return render(request, "dashboard/dashboard.html")
-
-
 def login_view(request):
     if request.method == "POST":
         username = request.POST.get("username")
@@ -238,7 +234,7 @@ def login_view(request):
 
         if user is not None:
             login(request, user)
-            return render(request, 'dashboard/profile_profesional.html', {'user': request.user})
+            return redirect('profile')
         else:
             return render(request, "armois/login_profesional.html", {
                 "message": "Usuario y/o contraseña incorrectos."

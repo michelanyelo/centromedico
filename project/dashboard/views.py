@@ -1,3 +1,4 @@
+import json
 from django.http import JsonResponse
 from django.shortcuts import render, redirect
 from armois.models import HorarioAtencion, Profesional, Especialidad, Subespecialidad, Reserva
@@ -105,26 +106,44 @@ def crud_reservas(request):
 
 @login_required
 def editar_reserva(request):
-    if request.method == 'POST':
-        reserva_id = request.POST.get('id')
-        hora_inicio = request.POST.get('hora_inicio')
-        hora_fin = request.POST.get('hora_fin')
+    try:
+        # Parsear el JSON de la solicitud
+        data = json.loads(request.body)
+        reserva_id = int(data.get('id'))
+        # paciente = data.get('paciente')
+        # profesional_nombre = data.get('profesional')
+        hora_inicio = data.get('hora_inicio')
+        hora_fin = data.get('hora_fin')
 
-        try:
-            # Obtener la reserva y su horario
-            reserva = Reserva.objects.get(id=reserva_id)
-            horario = reserva.horario
+        # Obtener la reserva
+        reserva = Reserva.objects.get(id=reserva_id)
 
-            # Actualizar los datos
-            horario.hora_inicio = hora_inicio
-            horario.hora_fin = hora_fin
-            horario.save()
+        # # Dividir el nombre completo del profesional en nombre y apellido
+        # nombre_completo = profesional_nombre.split()
+        # if len(nombre_completo) < 2:
+        #     return JsonResponse({'success': False, 'error': 'Nombre y apellido del profesional son necesarios'})
 
-            return JsonResponse({'success': True})
+        # nombre = nombre_completo[0]
+        # apellido = ' '.join(nombre_completo[1:])
 
-        except Reserva.DoesNotExist:
-            return JsonResponse({'success': False, 'error': 'Reserva no encontrada'})
-        except Exception as e:
-            return JsonResponse({'success': False, 'error': str(e)})
-    else:
-        return JsonResponse({'success': False, 'error': 'Método no permitido'})
+        # # Obtener la instancia del profesional por nombre y apellido
+        # try:
+        #     profesional = Profesional.objects.get(
+        #         nombre=nombre, apellido=apellido)
+        # except Profesional.DoesNotExist:
+        #     return JsonResponse({'success': False, 'error': f'Profesional con nombre "{profesional_nombre}" no encontrado'})
+
+        # Actualizar los datos de la reserva
+        # reserva.paciente.nombre = paciente
+        # reserva.profesional = profesional
+        reserva.horario.hora_inicio = hora_inicio
+        reserva.horario.hora_fin = hora_fin
+        reserva.horario.save()
+        reserva.save()
+
+        return JsonResponse({'success': True})
+
+    except Reserva.DoesNotExist:
+        return JsonResponse({'success': False, 'error': 'Reserva no encontrada'})
+    except Exception as e:
+        return JsonResponse({'success': False, 'error': str(e)})

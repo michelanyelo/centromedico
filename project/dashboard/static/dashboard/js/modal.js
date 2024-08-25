@@ -1,20 +1,13 @@
 document.addEventListener('DOMContentLoaded', function () {
-    let editarButtons = document.querySelectorAll('[data-bs-toggle="modal"]');
+    const editarButtons = document.querySelectorAll('[data-bs-toggle="modal"]');
 
     editarButtons.forEach(function (button) {
         button.addEventListener('click', function () {
-            let id = this.getAttribute('data-id');
-            let paciente = this.getAttribute('data-paciente');
-            let profesional = this.getAttribute('data-profesional');
-            let horaInicio = this.getAttribute('data-hora_inicio');
-            let horaFin = this.getAttribute('data-hora_fin');
-
-            // Verifica que los valores se obtienen correctamente
-            console.log('ID:', id);
-            console.log('Paciente:', paciente);
-            console.log('Profesional:', profesional);
-            console.log('Hora Inicio:', horaInicio);
-            console.log('Hora Fin:', horaFin);
+            const id = this.getAttribute('data-id');
+            const paciente = this.getAttribute('data-paciente');
+            const profesional = this.getAttribute('data-profesional');
+            const horaInicio = this.getAttribute('data-hora_inicio');
+            const horaFin = this.getAttribute('data-hora_fin');
 
             // Actualiza los valores del modal
             document.getElementById('modalReservaId').value = id;
@@ -28,12 +21,14 @@ document.addEventListener('DOMContentLoaded', function () {
     document.getElementById('formEditarReserva').addEventListener('submit', async function (event) {
         event.preventDefault(); // Evita el envío por defecto del formulario
 
-        let id = document.getElementById('modalReservaId').value;
-        let horaInicio = document.getElementById('modalHoraInicio').value;
-        let horaFin = document.getElementById('modalHoraFin').value;
+        const id = document.getElementById('modalReservaId').value;
+        // const paciente = document.getElementById('modalPaciente').value
+        // const profesional = document.getElementById('modalProfesional').value
+        const horaInicio = document.getElementById('modalHoraInicio').value;
+        const horaFin = document.getElementById('modalHoraFin').value;
 
         try {
-            const response = await fetch('/dashboard/editar-reserva', {
+            const response = await fetch('/dashboard/editar-reserva/', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -41,6 +36,8 @@ document.addEventListener('DOMContentLoaded', function () {
                 },
                 body: JSON.stringify({
                     id: id,
+                    // paciente: paciente,
+                    // profesional: profesional,
                     hora_inicio: horaInicio,
                     hora_fin: horaFin
                 })

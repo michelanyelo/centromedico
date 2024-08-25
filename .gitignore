@@ -1,2 +1,3 @@
 project/googlecalendar/credentials.json
 project/googlecalendar/token.json
+project/db.sqlite3

@@ -8,4 +8,5 @@ urlpatterns = [
     path('agregar-profesional/', views.add_profesional, name='agregar_profesional'),
     path('agregar-especialidad/', views.add_especialidad, name='agregar_especialidad'),
     path('listar-especialidad/', views.get_especialidad, name='listar_especialidad'),
+    path('editar-reserva/', views.editar_reserva, name='editar_reserva'),
 ]

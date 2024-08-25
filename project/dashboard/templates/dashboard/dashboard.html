@@ -1,5 +1,5 @@
 {% extends 'dashboard/layout.html' %}
-
+{% load static %}
 {% block title %}
   <title>Dashboard</title>
 {% endblock %}
@@ -7,13 +7,13 @@
 {% block content %}
   <div class="container mt-5">
     <h1 class="mb-4">Lista de Reservas</h1>
-    <table class="table table-bordered">
+    <table class="table table-bordered text-center">
       <thead>
         <tr>
           <th>Paciente</th>
-          <th>Inicio</th>
-          <th>Fin</th>
-          <th>Zona Horaria</th>
+          <th>Profesional</th>
+          <th>Hora Inicio</th>
+          <th>Hora Término</th>
           <th>Modificar</th>
           <th>Eliminar</th>
         </tr>
@@ -21,14 +21,21 @@
       <tbody>
         {% for reserva in reservas %}
           <tr>
-            <td>{{ reserva.paciente }}</td>  <!-- Adjust attribute names based on your model -->
-            <td>{{ reserva.inicio }}</td>
-            <td>{{ reserva.fin }}</td>
-            <td><button type="button" class="btn btn-primary">Editar</button></td>
-            <td><button type="button" class="btn btn-danger">Eliminar</button></td>
+            <td>{{ reserva.paciente.nombre }}</td>
+            <td>{{ reserva.profesional.nombre }} {{ reserva.profesional.apellido }}</td>
+            <td>{{ reserva.horario.hora_inicio }}</td>
+            <td>{{ reserva.horario.hora_fin }}</td>
+            <td>
+              <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#editarReserva" data-id="{{ reserva.id }}" data-paciente="{{ reserva.paciente.nombre }}" data-profesional="{{ reserva.profesional.nombre }} {{ reserva.profesional.apellido }}" data-hora_inicio="{{ reserva.horario.hora_inicio }}" data-hora_fin="{{ reserva.horario.hora_fin }}">Editar</button>
+            </td>
+            <td>
+              <button type="button" class="btn btn-danger">Eliminar</button>
+            </td>
           </tr>
         {% endfor %}
       </tbody>
     </table>
+    {% include 'dashboard/modalEditarReserva.html' %}
+    <script src="{% static 'dashboard/js/modal.js' %}"></script>
   </div>
 {% endblock %}

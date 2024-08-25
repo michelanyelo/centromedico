@@ -96,7 +96,35 @@ def listar_reservas(request):
 
     return render(request, 'dashboard/listar_reservas.html', {'events': events})
 
+
 @login_required
 def crud_reservas(request):
     reservas = Reserva.objects.all()
     return render(request, 'dashboard/dashboard.html', {'reservas': reservas})
+
+
+@login_required
+def editar_reserva(request):
+    if request.method == 'POST':
+        reserva_id = request.POST.get('id')
+        hora_inicio = request.POST.get('hora_inicio')
+        hora_fin = request.POST.get('hora_fin')
+
+        try:
+            # Obtener la reserva y su horario
+            reserva = Reserva.objects.get(id=reserva_id)
+            horario = reserva.horario
+
+            # Actualizar los datos
+            horario.hora_inicio = hora_inicio
+            horario.hora_fin = hora_fin
+            horario.save()
+
+            return JsonResponse({'success': True})
+
+        except Reserva.DoesNotExist:
+            return JsonResponse({'success': False, 'error': 'Reserva no encontrada'})
+        except Exception as e:
+            return JsonResponse({'success': False, 'error': str(e)})
+    else:
+        return JsonResponse({'success': False, 'error': 'Método no permitido'})

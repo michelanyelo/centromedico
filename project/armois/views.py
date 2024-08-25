@@ -205,6 +205,7 @@ def reservas_a_calendario(request):
             horario=horario_atencion,
             paciente=nuevo_paciente,
             especialidad = especialidad_profesional,
+            subespecialidad = subespecialidad_profesional,
             profesional=profesional,
             is_synced_with_google_calendar=True
         )

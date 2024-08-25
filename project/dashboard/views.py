@@ -75,9 +75,9 @@ def add_especialidad(request):
     return render(request, 'dashboard/nueva_especialidad.html')
 
 
-# def get_especialidad(request):
-#     specialties = Especialidad.objects.all().values('id', 'nombre', 'descripcion')
-#     return JsonResponse(list(specialties), safe=False)
+def get_especialidad(request):
+    specialties = Especialidad.objects.all().values('id', 'nombre', 'descripcion')
+    return JsonResponse(list(specialties), safe=False)
 
 
 @login_required

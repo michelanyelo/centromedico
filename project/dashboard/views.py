@@ -110,32 +110,21 @@ def editar_reserva(request):
         # Parsear el JSON de la solicitud
         data = json.loads(request.body)
         reserva_id = int(data.get('id'))
-        # paciente = data.get('paciente')
-        # profesional_nombre = data.get('profesional')
+        profesional_id = int(data.get('profesional_id')) # Usar ID del profesional
         hora_inicio = data.get('hora_inicio')
         hora_fin = data.get('hora_fin')
 
         # Obtener la reserva
         reserva = Reserva.objects.get(id=reserva_id)
 
-        # # Dividir el nombre completo del profesional en nombre y apellido
-        # nombre_completo = profesional_nombre.split()
-        # if len(nombre_completo) < 2:
-        #     return JsonResponse({'success': False, 'error': 'Nombre y apellido del profesional son necesarios'})
-
-        # nombre = nombre_completo[0]
-        # apellido = ' '.join(nombre_completo[1:])
-
-        # # Obtener la instancia del profesional por nombre y apellido
-        # try:
-        #     profesional = Profesional.objects.get(
-        #         nombre=nombre, apellido=apellido)
-        # except Profesional.DoesNotExist:
-        #     return JsonResponse({'success': False, 'error': f'Profesional con nombre "{profesional_nombre}" no encontrado'})
+        # Obtener la instancia del profesional por ID
+        try:
+            profesional = Profesional.objects.get(id=profesional_id)
+        except Profesional.DoesNotExist:
+            return JsonResponse({'success': False, 'error': f'Profesional con ID "{profesional_id}" no encontrado'})
 
         # Actualizar los datos de la reserva
-        # reserva.paciente.nombre = paciente
-        # reserva.profesional = profesional
+        reserva.profesional = profesional
         reserva.horario.hora_inicio = hora_inicio
         reserva.horario.hora_fin = hora_fin
         reserva.horario.save()
@@ -147,3 +136,8 @@ def editar_reserva(request):
         return JsonResponse({'success': False, 'error': 'Reserva no encontrada'})
     except Exception as e:
         return JsonResponse({'success': False, 'error': str(e)})
+
+
+def listar_profesionales(request):
+    profesionales = Profesional.objects.all().values('id', 'nombre', 'apellido')
+    return JsonResponse(list(profesionales), safe=False)

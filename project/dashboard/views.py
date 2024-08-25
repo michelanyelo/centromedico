@@ -108,11 +108,12 @@ def crud_reservas(request):
 def editar_reserva(request):
     try:
         data = json.loads(request.body)
-        reserva_id = int(data.get('id', 0))
-        nuevo_profesional_id = int(data.get('profesional_id', 0))
-        nuevo_horario_id = int(data.get('horario_id', 0))
+        reserva_id = int(data.get('id'))
+        nuevo_profesional_id = int(data.get('profesional_id'))
+        nuevo_horario_id = int(data.get('horario_id'))
+        nueva_especialidad_id = int(data.get('especialidad_id'))
         nueva_subespecialidad_id = int(
-            data.get('subespecialidad_id', 0))  # Agregado
+            data.get('subespecialidad_id'))  # Agregado
 
         # Validaciones previas
         if not reserva_id or not nuevo_profesional_id or not nuevo_horario_id:
@@ -124,9 +125,9 @@ def editar_reserva(request):
         # Obtener el profesional, el horario y la subespecialidad nuevos
         nuevo_profesional = Profesional.objects.get(id=nuevo_profesional_id)
         nuevo_horario = HorarioAtencion.objects.get(id=nuevo_horario_id)
+        nueva_especialidad = Especialidad.objects.get(id=nueva_especialidad_id)
         nueva_subespecialidad = None
         if nueva_subespecialidad_id:
-            # Asumiendo que existe un modelo de Subespecialidad
             nueva_subespecialidad = Subespecialidad.objects.get(
                 id=nueva_subespecialidad_id)
 
@@ -142,6 +143,7 @@ def editar_reserva(request):
             # Actualizar la reserva con el nuevo profesional, horario y subespecialidad
             reserva.profesional = nuevo_profesional
             reserva.horario = nuevo_horario
+            reserva.especialidad = nueva_especialidad
             if nueva_subespecialidad:
                 reserva.subespecialidad = nueva_subespecialidad
             reserva.save()
@@ -202,3 +204,28 @@ def listar_subespecialidades(request, especialidad_id):
         'subespecialidades': list(subespecialidades.values('id', 'nombre'))
     }
     return JsonResponse(data)
+
+
+@login_required
+def eliminar_reserva(request):
+    try:
+        data = json.loads(request.body)
+        reserva_id = int(data.get('id'))
+
+        # Obtener la reserva existente
+        reserva = Reserva.objects.get(id=reserva_id)
+
+        # Marcar el horario como disponible
+        horario = reserva.horario
+        horario.is_available = True
+        horario.save()
+
+        # Eliminar la reserva
+        reserva.delete()
+
+        return JsonResponse({'success': True, 'message': 'Reserva eliminada exitosamente'})
+
+    except Reserva.DoesNotExist:
+        return JsonResponse({'success': False, 'error': 'Reserva no encontrada'})
+    except Exception as e:
+        return JsonResponse({'success': False, 'error': f'Ocurrió un error inesperado: {str(e)}'})

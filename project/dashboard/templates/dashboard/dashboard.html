@@ -33,7 +33,7 @@
               <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#editarReserva" data-reserva-id="{{ reserva.id }}" data-paciente-nombre="{{ reserva.paciente.nombre }}" data-profesional-id="{{ reserva.profesional.id }}" data-especialidad-id="{{ reserva.especialidad.id }}" data-horario-id="{{ reserva.horario.id }}">Editar</button>
             </td>
             <td>
-              <button type="button" class="btn btn-danger">Eliminar</button>
+              <button type="button" class="btn btn-danger" data-reserva-id="{{ reserva.id }}" onclick="eliminarReserva('{{ reserva.id }}')">Eliminar</button>
             </td>
           </tr>
         {% endfor %}

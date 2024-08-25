@@ -174,3 +174,30 @@ formEditarReserva.addEventListener('submit', async function (event) {
         alert('Error al actualizar la reserva.');
     }
 });
+
+// Función para elimianr una reserva
+const eliminarReserva = async (reservaId) => {
+    if (confirm('¿Estás seguro de que deseas eliminar esta reserva?')) {
+        try {
+            const response = await fetch(`./eliminar-reserva/`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value
+                },
+                body: JSON.stringify({ id: reservaId })
+            })
+
+            const result = await response.json()
+            if (result.success) {
+                alert('Reserva eliminada exitosamente')
+                location.reload() // Recargar la página para reflejar los cambios
+            } else {
+                alert('Error al eliminar la reserva: ' + result.error)
+            }
+        } catch (error) {
+            console.error('Error al eliminar la reserva:', error)
+            alert('Error al eliminar la reserva.')
+        }
+    }
+};

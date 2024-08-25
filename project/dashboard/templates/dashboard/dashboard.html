@@ -26,7 +26,7 @@
             <td>{{ reserva.horario.hora_inicio }}</td>
             <td>{{ reserva.horario.hora_fin }}</td>
             <td>
-              <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#editarReserva" data-id="{{ reserva.id }}" data-paciente="{{ reserva.paciente.nombre }}" data-profesional="{{ reserva.profesional.nombre }} {{ reserva.profesional.apellido }}" data-hora_inicio="{{ reserva.horario.hora_inicio }}" data-hora_fin="{{ reserva.horario.hora_fin }}">Editar</button>
+              <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#editarReserva" data-id="{{ reserva.id }}" data-paciente="{{ reserva.paciente.nombre }}" data-profesional="{{ reserva.profesional.id }}" data-horario="{{ reserva.horario.id }}">Editar</button>
             </td>
             <td>
               <button type="button" class="btn btn-danger">Eliminar</button>

@@ -7,17 +7,17 @@ document.addEventListener('DOMContentLoaded', function () {
             const id = this.getAttribute('data-id');
             const paciente = this.getAttribute('data-paciente');
             const profesionalId = this.getAttribute('data-profesional'); // ID del profesional para la reserva
-            const horaInicio = this.getAttribute('data-hora_inicio');
-            const horaFin = this.getAttribute('data-hora_fin');
+            const horarioId = this.getAttribute('data-horario'); // ID del horario para la reserva
 
             // Actualiza los valores del modal
             document.getElementById('modalReservaId').value = id;
             document.getElementById('modalPaciente').value = paciente;
-            document.getElementById('modalHoraInicio').value = horaInicio;
-            document.getElementById('modalHoraFin').value = horaFin;
 
-            // Cargar los profesionales disponibles
+            // Cargar los profesionales disponibles y seleccionar el actual
             loadProfesionales(profesionalId);
+
+            // Cargar los horarios disponibles para el profesional seleccionado
+            loadHorariosDisponibles(profesionalId, horarioId);
         });
     });
 
@@ -26,10 +26,8 @@ document.addEventListener('DOMContentLoaded', function () {
         event.preventDefault();
 
         const id = document.getElementById('modalReservaId').value;
-        // const paciente = document.getElementById('modalPaciente').value;
         const profesionalId = document.getElementById('modalProfesional').value;
-        const horaInicio = document.getElementById('modalHoraInicio').value;
-        const horaFin = document.getElementById('modalHoraFin').value;
+        const horarioId = document.getElementById('modalHorario').value;
 
         try {
             const response = await fetch('/dashboard/editar-reserva/', {
@@ -40,10 +38,8 @@ document.addEventListener('DOMContentLoaded', function () {
                 },
                 body: JSON.stringify({
                     id: id,
-                    // paciente: paciente,
                     profesional_id: profesionalId,
-                    hora_inicio: horaInicio,
-                    hora_fin: horaFin
+                    horario_id: horarioId
                 })
             });
 
@@ -70,15 +66,14 @@ document.addEventListener('DOMContentLoaded', function () {
     async function loadProfesionales(selectedId) {
         try {
             const response = await fetch('/dashboard/listar-profesionales/');
-    
             if (!response.ok) {
                 throw new Error('Network response was not ok');
             }
-    
+
             const profesionales = await response.json();
             const selectProfesional = document.getElementById('modalProfesional');
             selectProfesional.innerHTML = ''; // Limpia las opciones existentes
-    
+
             profesionales.forEach((profesional) => {
                 const option = document.createElement('option');
                 option.value = profesional.id;
@@ -88,8 +83,51 @@ document.addEventListener('DOMContentLoaded', function () {
                 }
                 selectProfesional.appendChild(option);
             });
+
+            // Asegúrate de que al cambiar el profesional, se actualicen los horarios
+            selectProfesional.addEventListener('change', function () {
+                const selectedProfesionalId = this.value;
+                loadHorariosDisponibles(selectedProfesionalId);
+            });
+
+            // Forzar la carga de horarios para el profesional actualmente seleccionado
+            if (selectedId) {
+                loadHorariosDisponibles(selectedId);
+            }
         } catch (error) {
             console.error('Error fetching profesionales:', error);
+        }
+    }
+
+    // Función para cargar los horarios disponibles del profesional seleccionado
+    async function loadHorariosDisponibles(profesionalId, selectedHorarioId) {
+        try {
+            const response = await fetch(`/dashboard/listar-horarios/${profesionalId}/`);
+
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+
+            const horarios = await response.json();
+            const selectHorario = document.getElementById('modalHorario');
+            selectHorario.innerHTML = ''; // Limpia las opciones existentes
+
+            horarios.forEach((horario) => {
+                const option = document.createElement('option');
+                option.value = horario.id;
+                option.textContent = `${horario.hora_inicio} - ${horario.hora_fin}`;
+                if (horario.id == selectedHorarioId) {
+                    option.selected = true;
+                }
+                selectHorario.appendChild(option);
+            });
+
+            // Asegúrate de que el horario seleccionado esté visible
+            if (selectedHorarioId) {
+                selectHorario.value = selectedHorarioId;
+            }
+        } catch (error) {
+            console.error('Error fetching horarios:', error);
         }
     }
 });

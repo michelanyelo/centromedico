@@ -107,33 +107,40 @@ def crud_reservas(request):
 @login_required
 def editar_reserva(request):
     try:
-        # Parsear el JSON de la solicitud
         data = json.loads(request.body)
         reserva_id = int(data.get('id'))
-        profesional_id = int(data.get('profesional_id')) # Usar ID del profesional
-        hora_inicio = data.get('hora_inicio')
-        hora_fin = data.get('hora_fin')
+        nuevo_profesional_id = int(data.get('profesional_id'))
+        nuevo_horario_id = int(data.get('horario_id'))
 
-        # Obtener la reserva
+        # Obtener la reserva existente
         reserva = Reserva.objects.get(id=reserva_id)
 
-        # Obtener la instancia del profesional por ID
-        try:
-            profesional = Profesional.objects.get(id=profesional_id)
-        except Profesional.DoesNotExist:
-            return JsonResponse({'success': False, 'error': f'Profesional con ID "{profesional_id}" no encontrado'})
+        # Obtener el profesional y el horario nuevos
+        nuevo_profesional = Profesional.objects.get(id=nuevo_profesional_id)
+        nuevo_horario = HorarioAtencion.objects.get(id=nuevo_horario_id)
 
-        # Actualizar los datos de la reserva
-        reserva.profesional = profesional
-        reserva.horario.hora_inicio = hora_inicio
-        reserva.horario.hora_fin = hora_fin
-        reserva.horario.save()
+        # Obtener el horario del profesional anterior y marcarlo como disponible
+        horario_anterior = reserva.horario
+        horario_anterior.is_available = True
+        horario_anterior.save()
+
+        # Actualizar la reserva con el nuevo profesional y horario
+        reserva.profesional = nuevo_profesional
+        reserva.horario = nuevo_horario
         reserva.save()
+
+        # Marcar el nuevo horario como no disponible
+        nuevo_horario.is_available = False
+        nuevo_horario.save()
 
         return JsonResponse({'success': True})
 
     except Reserva.DoesNotExist:
         return JsonResponse({'success': False, 'error': 'Reserva no encontrada'})
+    except Profesional.DoesNotExist:
+        return JsonResponse({'success': False, 'error': 'Profesional no encontrado'})
+    except HorarioAtencion.DoesNotExist:
+        return JsonResponse({'success': False, 'error': 'Horario no encontrado'})
     except Exception as e:
         return JsonResponse({'success': False, 'error': str(e)})
 
@@ -141,3 +148,12 @@ def editar_reserva(request):
 def listar_profesionales(request):
     profesionales = Profesional.objects.all().values('id', 'nombre', 'apellido')
     return JsonResponse(list(profesionales), safe=False)
+
+
+def listar_horarios(request, profesional_id):
+    try:
+        horarios = HorarioAtencion.objects.filter(
+            profesional_id=profesional_id, is_available=True).values('id', 'hora_inicio', 'hora_fin')
+        return JsonResponse(list(horarios), safe=False)
+    except Exception as e:
+        return JsonResponse({'success': False, 'error': str(e)})

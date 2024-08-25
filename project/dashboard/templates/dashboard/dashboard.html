@@ -12,6 +12,7 @@
         <tr>
           <th>Paciente</th>
           <th>Profesional</th>
+          <th>Especialidad</th>
           <th>Hora Inicio</th>
           <th>Hora Término</th>
           <th>Modificar</th>
@@ -23,6 +24,7 @@
           <tr>
             <td>{{ reserva.paciente.nombre }}</td>
             <td>{{ reserva.profesional.nombre }} {{ reserva.profesional.apellido }}</td>
+            <td>{{ reserva.especialidad.nombre }}</td>
             <td>{{ reserva.horario.hora_inicio }}</td>
             <td>{{ reserva.horario.hora_fin }}</td>
             <td>

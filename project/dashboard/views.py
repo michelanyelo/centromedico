@@ -157,3 +157,11 @@ def listar_horarios(request, profesional_id):
         return JsonResponse(list(horarios), safe=False)
     except Exception as e:
         return JsonResponse({'success': False, 'error': str(e)})
+
+
+def listar_especialidad(request, profesional_id):
+    try:
+        especialidad = Profesional.objects.get(id=profesional_id).especialidad
+        return JsonResponse({'especialidad': especialidad})
+    except Exception as e:
+        return JsonResponse({'success': False, 'error': str(e)})

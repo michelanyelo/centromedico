@@ -204,6 +204,7 @@ def reservas_a_calendario(request):
         nueva_reserva = Reserva(
             horario=horario_atencion,
             paciente=nuevo_paciente,
+            especialidad = especialidad_profesional,
             profesional=profesional,
             is_synced_with_google_calendar=True
         )

@@ -1,4 +1,5 @@
 import json
+from pyexpat.errors import messages
 from django.http import JsonResponse
 from django.shortcuts import render, redirect
 from armois.models import HorarioAtencion, Profesional, Especialidad, Subespecialidad, Reserva
@@ -229,3 +230,14 @@ def eliminar_reserva(request):
         return JsonResponse({'success': False, 'error': 'Reserva no encontrada'})
     except Exception as e:
         return JsonResponse({'success': False, 'error': f'Ocurrió un error inesperado: {str(e)}'})
+
+
+@login_required
+def eliminar_reserva_calendario(request, reserva_id):
+    # Crear una instancia del administrador de Google Calendar
+    calendar_manager = gc.GoogleCalendarManager()
+
+    # Eliminar el evento de Google Calendar
+    calendar_manager.delete_event(reserva_id)
+
+    return redirect('listar_reservas')

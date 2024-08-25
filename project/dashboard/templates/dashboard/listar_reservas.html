@@ -13,15 +13,19 @@
           <th>Inicio</th>
           <th>Fin</th>
           <th>Zona Horaria</th>
+          <th>Eliminar</th>
         </tr>
       </thead>
       <tbody>
         {% for event in events %}
           <tr>
             <td>{{ event.summary }}</td>
-            <td>{{ event.start.dateTime}}</td>
-            <td>{{ event.end.dateTime}}</td>
+            <td>{{ event.start.dateTime }}</td>
+            <td>{{ event.end.dateTime }}</td>
             <td>{{ event.start.timeZone }}</td>
+            <td>
+              <a href="{% url 'eliminar_reserva_calendario' event.id %}" class="btn btn-danger">Eliminar</a>
+            </td>
           </tr>
         {% endfor %}
       </tbody>

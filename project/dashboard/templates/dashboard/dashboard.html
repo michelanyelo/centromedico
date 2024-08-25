@@ -13,6 +13,7 @@
           <th>Paciente</th>
           <th>Profesional</th>
           <th>Especialidad</th>
+          <th>Sub Especialidad</th>
           <th>Hora Inicio</th>
           <th>Hora Término</th>
           <th>Modificar</th>
@@ -25,10 +26,11 @@
             <td>{{ reserva.paciente.nombre }}</td>
             <td>{{ reserva.profesional.nombre }} {{ reserva.profesional.apellido }}</td>
             <td>{{ reserva.especialidad.nombre }}</td>
+            <td>{{ reserva.subespecialidad.nombre }}</td>
             <td>{{ reserva.horario.hora_inicio }}</td>
             <td>{{ reserva.horario.hora_fin }}</td>
             <td>
-              <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#editarReserva" data-id="{{ reserva.id }}" data-paciente="{{ reserva.paciente.nombre }}" data-profesional="{{ reserva.profesional.id }}" data-horario="{{ reserva.horario.id }}">Editar</button>
+              <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#editarReserva" data-reserva-id="{{ reserva.id }}" data-paciente-nombre="{{ reserva.paciente.nombre }}" data-profesional-id="{{ reserva.profesional.id }}" data-especialidad-id="{{ reserva.especialidad.id }}" data-horario-id="{{ reserva.horario.id }}">Editar</button>
             </td>
             <td>
               <button type="button" class="btn btn-danger">Eliminar</button>

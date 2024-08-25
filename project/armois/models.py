@@ -83,6 +83,7 @@ class Reserva(models.Model):
     horario = models.ForeignKey(HorarioAtencion, on_delete=models.CASCADE)
     paciente = models.ForeignKey(Paciente, on_delete=models.CASCADE)
     especialidad = models.ForeignKey(Especialidad, on_delete=models.CASCADE)
+    subespecialidad = models.ForeignKey(Subespecialidad, on_delete=models.CASCADE, null=True, blank=True)
     profesional = models.ForeignKey(Profesional, on_delete=models.CASCADE)
     fecha_reserva = models.DateTimeField(auto_now_add=True)
     is_synced_with_google_calendar = models.BooleanField(default=False)

@@ -1,133 +1,176 @@
-document.addEventListener('DOMContentLoaded', function () {
-    const editarButtons = document.querySelectorAll('[data-bs-toggle="modal"]');
+// Selección de elementos del DOM
+const modalProfesional = document.getElementById("modalProfesional");
+const modalEspecialidad = document.getElementById("modalEspecialidad");
+const modalSubespecialidad = document.getElementById("modalSubespecialidad");
+const modalHorario = document.getElementById("modalHorario");
+const modalReservaId = document.getElementById("modalReservaId");
+const modalPaciente = document.getElementById("modalPaciente");
+const formEditarReserva = document.getElementById("formEditarReserva");
 
-    // Manejar el clic en los botones para abrir el modal
-    editarButtons.forEach(function (button) {
-        button.addEventListener('click', function () {
-            const id = this.getAttribute('data-id');
-            const paciente = this.getAttribute('data-paciente');
-            const profesionalId = this.getAttribute('data-profesional'); // ID del profesional para la reserva
-            const horarioId = this.getAttribute('data-horario'); // ID del horario para la reserva
+// Listar profesionales en el modal
+const listarProfesionalesModal = async (profesionalId, especialidadId, horarioId) => {
+    try {
+        const response = await fetch('./listar-profesionales/');
+        const data = await response.json();
 
-            // Actualiza los valores del modal
-            document.getElementById('modalReservaId').value = id;
-            document.getElementById('modalPaciente').value = paciente;
+        let opciones = data.length > 0
+            ? data.map(profesional => `<option value="${profesional.id}">${profesional.nombre} ${profesional.apellido}</option>`).join("")
+            : '<option value="0">No hay profesionales disponibles</option>';
 
-            // Cargar los profesionales disponibles y seleccionar el actual
-            loadProfesionales(profesionalId);
+        modalProfesional.innerHTML = opciones;
+        modalProfesional.value = profesionalId;
 
-            // Cargar los horarios disponibles para el profesional seleccionado
-            loadHorariosDisponibles(profesionalId, horarioId);
+        listarEspecialidadesModal(profesionalId, especialidadId, horarioId);
+    } catch (error) {
+        console.error("Error al obtener los profesionales:", error);
+    }
+};
+
+// Listar especialidades en el modal
+const listarEspecialidadesModal = async (profesionalId, especialidadId, horarioId) => {
+    try {
+        const response = await fetch(`./listar-especialidad/${profesionalId}`);
+        const data = await response.json();
+
+        if (data.success) {
+            const especialidad = data.especialidad;
+            const opciones = especialidad
+                ? `<option value="${especialidad.id}">${especialidad.nombre}</option>`
+                : '<option value="0">No hay especialidades disponibles</option>';
+
+            modalEspecialidad.innerHTML = opciones;
+            modalEspecialidad.value = especialidadId;
+
+            listarSubespecialidadesModal(especialidadId);
+            listarHorariosModal(profesionalId, horarioId);
+        } else {
+            alert("Especialidades no encontradas");
+        }
+    } catch (error) {
+        console.error("Error al obtener las especialidades:", error);
+    }
+};
+
+// Listar subespecialidades en el modal
+const listarSubespecialidadesModal = async (especialidadId) => {
+    try {
+        const response = await fetch(`./listar-subespecialidades/${especialidadId}`);
+        const data = await response.json();
+
+        if (data.success) {
+            const opciones = data.subespecialidades.length > 0
+                ? data.subespecialidades.map(subespecialidad => `<option value="${subespecialidad.id}">${subespecialidad.nombre}</option>`).join("")
+                : '<option value="0">No hay subespecialidades disponibles</option>';
+
+            modalSubespecialidad.innerHTML = opciones;
+            modalSubespecialidad.style.display = "block";
+        } else {
+            modalSubespecialidad.innerHTML = '<option value="0">No hay subespecialidades disponibles</option>';
+            modalSubespecialidad.style.display = "none";
+        }
+    } catch (error) {
+        console.error("Error al obtener las subespecialidades:", error);
+        modalSubespecialidad.innerHTML = '<option value="0">Error al cargar subespecialidades</option>';
+        modalSubespecialidad.style.display = "none";
+    }
+};
+
+// Listar horarios en el modal
+const listarHorariosModal = async (profesionalId, horarioId) => {
+    try {
+        const response = await fetch(`./listar-horarios/${profesionalId}/`);
+        const data = await response.json();
+
+        const opciones = data.length > 0
+            ? data.map(horario => `<option value="${horario.id}">${horario.hora_inicio} - ${horario.hora_fin}</option>`).join("")
+            : '<option value="0">No hay horarios disponibles</option>';
+
+        modalHorario.innerHTML = opciones;
+        modalHorario.value = horarioId;
+    } catch (error) {
+        console.error("Error al obtener los horarios disponibles:", error);
+    }
+};
+
+// Manejo del evento para mostrar el modal
+document.getElementById('editarReserva').addEventListener('show.bs.modal', function (event) {
+    const button = event.relatedTarget;
+    const reservaId = button.getAttribute('data-reserva-id');
+    const pacienteNombre = button.getAttribute('data-paciente-nombre');
+    const profesionalId = button.getAttribute('data-profesional-id');
+    const especialidadId = button.getAttribute('data-especialidad-id');
+    const horarioId = button.getAttribute('data-horario-id');
+
+    modalReservaId.value = reservaId;
+    modalPaciente.value = pacienteNombre;
+
+    listarProfesionalesModal(profesionalId, especialidadId, horarioId);
+});
+
+// Actualizar especialidades cuando cambie el profesional
+modalProfesional.addEventListener("change", () => {
+    listarEspecialidadesModal(modalProfesional.value, null, null);
+});
+
+// Actualizar subespecialidades cuando cambie la especialidad
+modalEspecialidad.addEventListener("change", () => {
+    listarSubespecialidadesModal(modalEspecialidad.value);
+});
+
+// Actualizar horarios cuando cambie la subespecialidad
+modalSubespecialidad.addEventListener("change", () => {
+    listarHorariosModal(modalProfesional.value, null);
+});
+
+// Validar el formulario antes de enviarlo
+formEditarReserva.addEventListener('submit', async function (event) {
+    event.preventDefault(); // Evita el envío por defecto
+
+    const profesional = modalProfesional.value;
+    const especialidad = modalEspecialidad.value;
+    const subespecialidad = modalSubespecialidad.value;
+    const horario = modalHorario.value;
+    const reservaId = modalReservaId.value;
+
+    if (!profesional || profesional === "0") {
+        alert('Por favor, seleccione un profesional.');
+        return;
+    }
+    if (!especialidad || especialidad === "0") {
+        alert('Por favor, seleccione una especialidad.');
+        return;
+    }
+    if (!horario || horario === "0") {
+        alert('Por favor, seleccione un horario.');
+        return;
+    }
+
+    try {
+        const response = await fetch('editar-reserva/', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value
+            },
+            body: JSON.stringify({
+                id: reservaId,
+                profesional_id: profesional,
+                especialidad_id: especialidad,
+                subespecialidad_id: subespecialidad,
+                horario_id: horario
+            })
         });
-    });
 
-    // Manejar el envío del formulario
-    document.getElementById('formEditarReserva').addEventListener('submit', async function (event) {
-        event.preventDefault();
-
-        const id = document.getElementById('modalReservaId').value;
-        const profesionalId = document.getElementById('modalProfesional').value;
-        const horarioId = document.getElementById('modalHorario').value;
-
-        try {
-            const response = await fetch('/dashboard/editar-reserva/', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-CSRFToken': getCsrfToken()
-                },
-                body: JSON.stringify({
-                    id: id,
-                    profesional_id: profesionalId,
-                    horario_id: horarioId
-                })
-            });
-
-            const data = await response.json();
-
-            if (data.success) {
-                alert('Reserva actualizada con éxito');
-                location.reload();
-            } else {
-                alert('Error al actualizar la reserva: ' + data.error);
-            }
-        } catch (error) {
-            console.error('Error:', error);
-            alert('Hubo un problema con la solicitud. Por favor, inténtalo de nuevo.');
+        const result = await response.json();
+        if (result.success) {
+            alert('Reserva actualizada exitosamente');
+            $('#editarReserva').modal('hide');
+            location.reload();
+        } else {
+            alert('Error al actualizar la reserva: ' + result.error);
         }
-    });
-
-    // Función para obtener el token CSRF
-    function getCsrfToken() {
-        return document.querySelector('[name=csrfmiddlewaretoken]').value;
-    }
-
-    // Función para cargar los profesionales disponibles en el select
-    async function loadProfesionales(selectedId) {
-        try {
-            const response = await fetch('/dashboard/listar-profesionales/');
-            if (!response.ok) {
-                throw new Error('Network response was not ok');
-            }
-
-            const profesionales = await response.json();
-            const selectProfesional = document.getElementById('modalProfesional');
-            selectProfesional.innerHTML = ''; // Limpia las opciones existentes
-
-            profesionales.forEach((profesional) => {
-                const option = document.createElement('option');
-                option.value = profesional.id;
-                option.textContent = `${profesional.nombre} ${profesional.apellido}`;
-                if (profesional.id == selectedId) {
-                    option.selected = true;
-                }
-                selectProfesional.appendChild(option);
-            });
-
-            // Asegúrate de que al cambiar el profesional, se actualicen los horarios
-            selectProfesional.addEventListener('change', function () {
-                const selectedProfesionalId = this.value;
-                loadHorariosDisponibles(selectedProfesionalId);
-            });
-
-            // Forzar la carga de horarios para el profesional actualmente seleccionado
-            if (selectedId) {
-                loadHorariosDisponibles(selectedId);
-            }
-        } catch (error) {
-            console.error('Error fetching profesionales:', error);
-        }
-    }
-
-    // Función para cargar los horarios disponibles del profesional seleccionado
-    async function loadHorariosDisponibles(profesionalId, selectedHorarioId) {
-        try {
-            const response = await fetch(`/dashboard/listar-horarios/${profesionalId}/`);
-
-            if (!response.ok) {
-                throw new Error('Network response was not ok');
-            }
-
-            const horarios = await response.json();
-            const selectHorario = document.getElementById('modalHorario');
-            selectHorario.innerHTML = ''; // Limpia las opciones existentes
-
-            horarios.forEach((horario) => {
-                const option = document.createElement('option');
-                option.value = horario.id;
-                option.textContent = `${horario.hora_inicio} - ${horario.hora_fin}`;
-                if (horario.id == selectedHorarioId) {
-                    option.selected = true;
-                }
-                selectHorario.appendChild(option);
-            });
-
-            // Asegúrate de que el horario seleccionado esté visible
-            if (selectedHorarioId) {
-                selectHorario.value = selectedHorarioId;
-            }
-        } catch (error) {
-            console.error('Error fetching horarios:', error);
-        }
+    } catch (error) {
+        console.error('Error al actualizar la reserva:', error);
+        alert('Error al actualizar la reserva.');
     }
 });

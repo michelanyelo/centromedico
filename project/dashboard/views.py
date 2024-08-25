@@ -61,9 +61,9 @@ def add_especialidad(request):
             sub_name = sub_name.title()
             try:
                 specialty = Especialidad.objects.get(id=specialty_id)
-                full_sub_name = f"{specialty.nombre} {sub_name}"
+                sub_name = f"{sub_name}"
                 Subespecialidad.objects.create(
-                    nombre=full_sub_name, especialidad=specialty)
+                    nombre=sub_name, especialidad=specialty)
                 return JsonResponse({'status': 'success', 'message': 'Subespecialidad creada con éxito.'})
             except Especialidad.DoesNotExist:
                 return JsonResponse({'status': 'error', 'message': 'Especialidad no encontrada.'})
@@ -74,9 +74,9 @@ def add_especialidad(request):
     return render(request, 'dashboard/nueva_especialidad.html')
 
 
-def get_especialidad(request):
-    specialties = Especialidad.objects.all().values('id', 'nombre', 'descripcion')
-    return JsonResponse(list(specialties), safe=False)
+# def get_especialidad(request):
+#     specialties = Especialidad.objects.all().values('id', 'nombre', 'descripcion')
+#     return JsonResponse(list(specialties), safe=False)
 
 
 @login_required
@@ -108,32 +108,49 @@ def crud_reservas(request):
 def editar_reserva(request):
     try:
         data = json.loads(request.body)
-        reserva_id = int(data.get('id'))
-        nuevo_profesional_id = int(data.get('profesional_id'))
-        nuevo_horario_id = int(data.get('horario_id'))
+        reserva_id = int(data.get('id', 0))
+        nuevo_profesional_id = int(data.get('profesional_id', 0))
+        nuevo_horario_id = int(data.get('horario_id', 0))
+        nueva_subespecialidad_id = int(
+            data.get('subespecialidad_id', 0))  # Agregado
+
+        # Validaciones previas
+        if not reserva_id or not nuevo_profesional_id or not nuevo_horario_id:
+            return JsonResponse({'success': False, 'error': 'Datos insuficientes para editar la reserva'})
 
         # Obtener la reserva existente
         reserva = Reserva.objects.get(id=reserva_id)
 
-        # Obtener el profesional y el horario nuevos
+        # Obtener el profesional, el horario y la subespecialidad nuevos
         nuevo_profesional = Profesional.objects.get(id=nuevo_profesional_id)
         nuevo_horario = HorarioAtencion.objects.get(id=nuevo_horario_id)
+        nueva_subespecialidad = None
+        if nueva_subespecialidad_id:
+            # Asumiendo que existe un modelo de Subespecialidad
+            nueva_subespecialidad = Subespecialidad.objects.get(
+                id=nueva_subespecialidad_id)
 
-        # Obtener el horario del profesional anterior y marcarlo como disponible
-        horario_anterior = reserva.horario
-        horario_anterior.is_available = True
-        horario_anterior.save()
+        # Verificar que el nuevo horario esté disponible
+        if not nuevo_horario.is_available:
+            return JsonResponse({'success': False, 'error': 'El horario seleccionado no está disponible'})
 
-        # Actualizar la reserva con el nuevo profesional y horario
-        reserva.profesional = nuevo_profesional
-        reserva.horario = nuevo_horario
-        reserva.save()
+        # Marcar el horario anterior como disponible si no es el mismo
+        if reserva.horario != nuevo_horario:
+            reserva.horario.is_available = True
+            reserva.horario.save()
 
-        # Marcar el nuevo horario como no disponible
-        nuevo_horario.is_available = False
-        nuevo_horario.save()
+            # Actualizar la reserva con el nuevo profesional, horario y subespecialidad
+            reserva.profesional = nuevo_profesional
+            reserva.horario = nuevo_horario
+            if nueva_subespecialidad:
+                reserva.subespecialidad = nueva_subespecialidad
+            reserva.save()
 
-        return JsonResponse({'success': True})
+            # Marcar el nuevo horario como no disponible
+            nuevo_horario.is_available = False
+            nuevo_horario.save()
+
+        return JsonResponse({'success': True, 'message': 'Reserva actualizada exitosamente'})
 
     except Reserva.DoesNotExist:
         return JsonResponse({'success': False, 'error': 'Reserva no encontrada'})
@@ -141,8 +158,11 @@ def editar_reserva(request):
         return JsonResponse({'success': False, 'error': 'Profesional no encontrado'})
     except HorarioAtencion.DoesNotExist:
         return JsonResponse({'success': False, 'error': 'Horario no encontrado'})
+    except Subespecialidad.DoesNotExist:  # Agregado
+        # Agregado
+        return JsonResponse({'success': False, 'error': 'Subespecialidad no encontrada'})
     except Exception as e:
-        return JsonResponse({'success': False, 'error': str(e)})
+        return JsonResponse({'success': False, 'error': f'Ocurrió un error inesperado: {str(e)}'})
 
 
 def listar_profesionales(request):
@@ -161,7 +181,24 @@ def listar_horarios(request, profesional_id):
 
 def listar_especialidad(request, profesional_id):
     try:
-        especialidad = Profesional.objects.get(id=profesional_id).especialidad
-        return JsonResponse({'especialidad': especialidad})
+        profesional = Profesional.objects.get(id=profesional_id)
+        especialidad = profesional.especialidad
+        especialidad_data = {
+            'id': especialidad.id,
+            'nombre': especialidad.nombre,
+        }
+        return JsonResponse({'success': True, 'especialidad': especialidad_data})
+    except Profesional.DoesNotExist:
+        return JsonResponse({'success': False, 'error': 'Profesional no encontrado'})
     except Exception as e:
         return JsonResponse({'success': False, 'error': str(e)})
+
+
+def listar_subespecialidades(request, especialidad_id):
+    subespecialidades = Subespecialidad.objects.filter(
+        especialidad_id=especialidad_id)
+    data = {
+        'success': True,
+        'subespecialidades': list(subespecialidades.values('id', 'nombre'))
+    }
+    return JsonResponse(data)

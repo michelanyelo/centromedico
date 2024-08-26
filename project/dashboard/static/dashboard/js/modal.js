@@ -1,13 +1,5 @@
-// Selección de elementos del DOM
-const modalProfesional = document.getElementById("modalProfesional");
-const modalEspecialidad = document.getElementById("modalEspecialidad");
-const modalSubespecialidad = document.getElementById("modalSubespecialidad");
-const modalHorario = document.getElementById("modalHorario");
-const modalReservaId = document.getElementById("modalReservaId");
-const modalPaciente = document.getElementById("modalPaciente");
-const formEditarReserva = document.getElementById("formEditarReserva");
+// Funciones de carga de datos
 
-// Listar profesionales en el modal
 const listarProfesionalesModal = async (profesionalId, especialidadId, horarioId) => {
     try {
         const response = await fetch('./listar-profesionales/');
@@ -26,7 +18,6 @@ const listarProfesionalesModal = async (profesionalId, especialidadId, horarioId
     }
 };
 
-// Listar especialidades en el modal
 const listarEspecialidadesModal = async (profesionalId, especialidadId, horarioId) => {
     try {
         const response = await fetch(`./listar-especialidad/${profesionalId}`);
@@ -51,7 +42,6 @@ const listarEspecialidadesModal = async (profesionalId, especialidadId, horarioI
     }
 };
 
-// Listar subespecialidades en el modal
 const listarSubespecialidadesModal = async (especialidadId) => {
     try {
         const response = await fetch(`./listar-subespecialidades/${especialidadId}`);
@@ -75,12 +65,10 @@ const listarSubespecialidadesModal = async (especialidadId) => {
     }
 };
 
-// Listar horarios en el modal
 const listarHorariosModal = async (profesionalId, horarioId) => {
     try {
         const response = await fetch(`./listar-horarios/${profesionalId}/`);
         const data = await response.json();
-        console.log(data);
 
         const opciones = data.length > 0
             ? data.map(horario => {
@@ -96,6 +84,18 @@ const listarHorariosModal = async (profesionalId, horarioId) => {
     }
 };
 
+// Función para darle legibilidad a la fecha
+const formatearFecha = (fechaStr) => {
+    const fecha = new Date(fechaStr + 'T00:00:00');
+    const opcionesFecha = {
+        weekday: 'long',
+        day: 'numeric',
+        month: 'long',
+        year: 'numeric',
+        timeZone: 'America/Santiago'
+    };
+    return fecha.toLocaleDateString('es-ES', opcionesFecha);
+};
 
 // Manejo del evento para mostrar el modal
 document.getElementById('editarReserva').addEventListener('show.bs.modal', function (event) {
@@ -129,7 +129,7 @@ modalSubespecialidad.addEventListener("change", () => {
 
 // Validar el formulario antes de enviarlo
 formEditarReserva.addEventListener('submit', async function (event) {
-    event.preventDefault(); // Evita el envío por defecto
+    event.preventDefault();
 
     const profesional = modalProfesional.value;
     const especialidad = modalEspecialidad.value;
@@ -180,7 +180,7 @@ formEditarReserva.addEventListener('submit', async function (event) {
     }
 });
 
-// Función para elimianr una reserva
+// Función para eliminar una reserva
 const eliminarReserva = async (reservaId) => {
     if (confirm('¿Estás seguro de que deseas eliminar esta reserva?')) {
         try {
@@ -191,31 +191,18 @@ const eliminarReserva = async (reservaId) => {
                     'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value
                 },
                 body: JSON.stringify({ id: reservaId })
-            })
+            });
 
-            const result = await response.json()
+            const result = await response.json();
             if (result.success) {
-                alert('Reserva eliminada exitosamente')
-                location.reload() // Recargar la página para reflejar los cambios
+                alert('Reserva eliminada exitosamente');
+                location.reload();
             } else {
-                alert('Error al eliminar la reserva: ' + result.error)
+                alert('Error al eliminar la reserva: ' + result.error);
             }
         } catch (error) {
-            console.error('Error al eliminar la reserva:', error)
-            alert('Error al eliminar la reserva.')
+            console.error('Error al eliminar la reserva:', error);
+            alert('Error al eliminar la reserva.');
         }
     }
-};
-
-// Función para darle legibilidad a la fecha
-const formatearFecha = (fechaStr) => {
-    const fecha = new Date(fechaStr + 'T00:00:00'); // Agrega T00:00:00 para forzar UTC
-    const opcionesFecha = {
-        weekday: 'long', // Día de la semana
-        day: 'numeric',  // Día del mes
-        month: 'long',   // Mes
-        year: 'numeric', // Año
-        timeZone: 'America/Santiago' // Ajusta según tu zona horaria
-    };
-    return fecha.toLocaleDateString('es-ES', opcionesFecha);
 };

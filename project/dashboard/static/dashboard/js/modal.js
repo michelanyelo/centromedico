@@ -180,11 +180,11 @@ formEditarReserva.addEventListener('submit', async function (event) {
     }
 });
 
-// Función para eliminar una reserva
-const eliminarReserva = async (reservaId) => {
-    if (confirm('¿Estás seguro de que deseas eliminar esta reserva?')) {
+// Función para finalizar una reserva
+const finalizarReserva = async (reservaId) => {
+    if (confirm('¿Estás seguro de que deseas finalizar esta reserva?')) {
         try {
-            const response = await fetch(`./eliminar-reserva/`, {
+            const response = await fetch('./finalizar-reserva/', { // Actualiza el endpoint según tu implementación
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -195,14 +195,14 @@ const eliminarReserva = async (reservaId) => {
 
             const result = await response.json();
             if (result.success) {
-                alert('Reserva eliminada exitosamente');
+                alert('Reserva finalizada exitosamente');
                 location.reload();
             } else {
-                alert('Error al eliminar la reserva: ' + result.error);
+                alert('Error al finalizar la reserva: ' + result.error);
             }
         } catch (error) {
-            console.error('Error al eliminar la reserva:', error);
-            alert('Error al eliminar la reserva.');
+            console.error('Error al finalizar la reserva:', error);
+            alert('Error al finalizar la reserva.');
         }
     }
 };

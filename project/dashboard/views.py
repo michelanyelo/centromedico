@@ -219,12 +219,15 @@ def eliminar_reserva(request):
         # Marcar el horario como disponible
         horario = reserva.horario
         horario.is_available = True
+        # Marcar reserva como finalizada
+        reserva.is_active = False
         horario.save()
+        reserva.save()
 
         # Eliminar la reserva
-        reserva.delete()
+        # reserva.delete()
 
-        return JsonResponse({'success': True, 'message': 'Reserva eliminada exitosamente'})
+        return JsonResponse({'success': True, 'message': 'Reserva finalizada exitosamente'})
 
     except Reserva.DoesNotExist:
         return JsonResponse({'success': False, 'error': 'Reserva no encontrada'})

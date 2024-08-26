@@ -87,6 +87,7 @@ class Reserva(models.Model):
     profesional = models.ForeignKey(Profesional, on_delete=models.CASCADE)
     fecha_reserva = models.DateTimeField(auto_now_add=True)
     is_synced_with_google_calendar = models.BooleanField(default=False)
+    is_active = models.BooleanField(default=True)
 
     def __str__(self):
         return f"Reserva de {self.paciente.nombre} con {self.horario.profesional.nombre} el {self.horario.fecha} desde las {self.horario.hora_inicio} hasta las {self.horario.hora_fin}"

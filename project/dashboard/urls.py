@@ -13,7 +13,7 @@ urlpatterns = [
     path('listar-especialidad/<int:profesional_id>/', views.listar_especialidad, name='listar_especialidad'),
     path('listar-subespecialidades/<int:especialidad_id>/', views.listar_subespecialidades, name='listar_subespecialidades'),
     path('editar-reserva/', views.editar_reserva, name='editar_reserva'),
-    path('eliminar-reserva/', views.eliminar_reserva, name='eliminar_reserva'),
+    path('finalizar-reserva/', views.eliminar_reserva, name='eliminar_reserva'),
     path('eliminar-reserva-calendario/<str:reserva_id>/', views.eliminar_reserva_calendario, name='eliminar_reserva_calendario'),
 
 ]

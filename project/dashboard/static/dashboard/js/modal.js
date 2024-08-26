@@ -80,9 +80,13 @@ const listarHorariosModal = async (profesionalId, horarioId) => {
     try {
         const response = await fetch(`./listar-horarios/${profesionalId}/`);
         const data = await response.json();
+        console.log(data);
 
         const opciones = data.length > 0
-            ? data.map(horario => `<option value="${horario.id}">${horario.hora_inicio} - ${horario.hora_fin}</option>`).join("")
+            ? data.map(horario => {
+                const fechaFormateada = formatearFecha(horario.fecha);
+                return `<option value="${horario.id}">${fechaFormateada} ${horario.hora_inicio} - ${horario.hora_fin}</option>`;
+            }).join("")
             : '<option value="0">No hay horarios disponibles</option>';
 
         modalHorario.innerHTML = opciones;
@@ -91,6 +95,7 @@ const listarHorariosModal = async (profesionalId, horarioId) => {
         console.error("Error al obtener los horarios disponibles:", error);
     }
 };
+
 
 // Manejo del evento para mostrar el modal
 document.getElementById('editarReserva').addEventListener('show.bs.modal', function (event) {
@@ -200,4 +205,17 @@ const eliminarReserva = async (reservaId) => {
             alert('Error al eliminar la reserva.')
         }
     }
+};
+
+// Función para darle legibilidad a la fecha
+const formatearFecha = (fechaStr) => {
+    const fecha = new Date(fechaStr + 'T00:00:00'); // Agrega T00:00:00 para forzar UTC
+    const opcionesFecha = {
+        weekday: 'long', // Día de la semana
+        day: 'numeric',  // Día del mes
+        month: 'long',   // Mes
+        year: 'numeric', // Año
+        timeZone: 'America/Santiago' // Ajusta según tu zona horaria
+    };
+    return fecha.toLocaleDateString('es-ES', opcionesFecha);
 };

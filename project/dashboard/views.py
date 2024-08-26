@@ -176,7 +176,7 @@ def listar_profesionales(request):
 def listar_horarios(request, profesional_id):
     try:
         horarios = HorarioAtencion.objects.filter(
-            profesional_id=profesional_id, is_available=True).values('id', 'hora_inicio', 'hora_fin')
+            profesional_id=profesional_id, is_available=True).values('id', 'fecha', 'hora_inicio', 'hora_fin')
         return JsonResponse(list(horarios), safe=False)
     except Exception as e:
         return JsonResponse({'success': False, 'error': str(e)})

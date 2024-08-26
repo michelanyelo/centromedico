@@ -1,10 +1,4 @@
-const cboEspecialidad = document.getElementById("cboEspecialidad");
-const cboSubEspecialidad = document.getElementById("cboSubEspecialidad");
-const cboProfesional = document.getElementById("cboProfesional");
-const cboHorario = document.getElementById("cboHorario");
-const fechaSeleccionadaInput = document.getElementById("fechaSeleccionada");
-const subespecialidadLabel = document.getElementById("subespecialidadLabel");
-const horarioLabel = document.getElementById("horarioLabel");
+// Funciones de carga de datos
 
 const listarEspecialidad = async () => {
     try {
@@ -17,7 +11,6 @@ const listarEspecialidad = async () => {
             });
             cboEspecialidad.innerHTML = opciones;
             listarSubEspecialidad(data.especialidad[0].id);
-
         } else {
             alert("Especialidad no encontrada");
         }
@@ -62,9 +55,7 @@ const listarProfesionalesConSubesp = async (idSubEspecialidad) => {
                 opciones += `<option value="${profesional.id}">${profesional.nombre} ${profesional.apellido}</option>`;
             });
             cboProfesional.innerHTML = opciones;
-            // Seleccionar automáticamente el primer profesional
             cboProfesional.selectedIndex = 0;
-            // Llamar a listarHorariosDisponibles con el ID del primer profesional
             listarHorariosDisponibles(cboProfesional.value);
         } else {
             let opciones = `<option value="0">No hay profesional</option>`;
@@ -86,9 +77,7 @@ const listarProfesionalesSinSubesp = async (idEspecialidad) => {
                 opciones += `<option value="${profesional.id}">${profesional.nombre} ${profesional.apellido}</option>`;
             });
             cboProfesional.innerHTML = opciones;
-            // Seleccionar automáticamente el primer profesional
             cboProfesional.selectedIndex = 0;
-            // Llamar a listarHorariosDisponibles con el ID del primer profesional
             listarHorariosDisponibles(cboProfesional.value);
         } else {
             let opciones = `<option value="0">No hay profesional</option>`;
@@ -104,39 +93,16 @@ const listarHorariosDisponibles = async (profesionalId) => {
         const response = await fetch(`./horarios/${profesionalId}`);
         const data = await response.json();
 
-        let opciones = "";
-        if (data.message === "Success") {
-            data.horarios.forEach((horario) => {
-                // Convertir la fecha a un objeto Date con la zona horaria de Santiago
-                const fecha = new Date(`${horario.fecha}T00:00:00`);
-                const timezoneLocal = { timeZone: 'America/Santiago' };
-                fecha.toLocaleString("es-ES", timezoneLocal); // Establecer la zona horaria
-                // Obtener el nombre del día de la semana
-                const diaSemana = fecha.toLocaleDateString("es-ES", { weekday: "long" });
-                const diaSemanaCapitalizado = diaSemana.charAt(0).toUpperCase() + diaSemana.slice(1);
-                // Obtener el número del día en el calendario
-                const numeroDia = fecha.getDate();
-                if (fecha.getMonth() + 1 < 10) {
-                    mes_completo = "0" + (fecha.getMonth() + 1)
-                } else {
-                    mes_completo = fecha.getMonth() + 1
-                }
+        let opciones = data.message === "Success"
+            ? data.horarios.map(horario => {
+                const fechaFormateada = formatearFecha(horario.fecha);
+                return `<option value="${horario.id}" data-fecha="${fechaFormateada}/${horario.hora_inicio}/${horario.hora_fin}">${fechaFormateada} : ${horario.hora_inicio} - ${horario.hora_fin}</option>`;
+            }).join("")
+            : '<option value="0">No hay horarios disponibles</option>';
 
-                if (numeroDia < 10) {
-                    dia_completo = "0" + (numeroDia)
-                } else {
-                    dia_completo = numeroDia
-                }
-                opciones += `<option value="${horario.id}" data-fecha="${dia_completo}/${mes_completo}/${fecha.getFullYear()}/${horario.hora_inicio}/${horario.hora_fin}">${diaSemanaCapitalizado} ${dia_completo}/${mes_completo}/${fecha.getFullYear()} : ${horario.hora_inicio} - ${horario.hora_fin}</option>`;
-            });
-            cboHorario.innerHTML = ""; // Limpiar las opciones existentes
-            cboHorario.innerHTML = opciones; // Agregar las nuevas opciones
-            cboHorario.selectedIndex = 0; // Establecer la primera opción como seleccionada
-            cboHorario.dispatchEvent(new Event("change")); // Disparar manualmente el evento change
-        } else {
-            opciones = '<option value="0">No hay horarios disponibles</option>';
-            cboHorario.innerHTML = opciones; // Limpiar el campo de selección de horarios y establecer el mensaje de "No hay horarios disponibles"
-        }
+        cboHorario.innerHTML = opciones;
+        cboHorario.selectedIndex = 0;
+        cboHorario.dispatchEvent(new Event("change"));
         cboHorario.style.display = "block";
         horarioLabel.style.display = "block";
     } catch (error) {
@@ -144,6 +110,7 @@ const listarHorariosDisponibles = async (profesionalId) => {
     }
 };
 
+// Funciones de manipulación de UI
 
 const cargaInicial = async () => {
     await listarEspecialidad();
@@ -163,12 +130,9 @@ const cargaInicial = async () => {
 
     cboHorario.addEventListener("change", () => {
         if (cboHorario.value === "0") {
-            // Si se selecciona "No hay horarios disponibles", mostrar un mensaje de error
             alert("Por favor, seleccione un horario disponible.");
-            // Reiniciar el campo de selección de horarios seleccionando la primera opción disponible
             cboHorario.selectedIndex = 0;
         } else {
-            // Si se selecciona un horario disponible, continuar con el proceso
             const fechaSeleccionada = cboHorario.options[cboHorario.selectedIndex].getAttribute("data-fecha");
             const [dia, mes, anio, hora_inicio, hora_fin] = fechaSeleccionada.split('/');
             document.getElementById("dia").value = dia;
@@ -176,23 +140,11 @@ const cargaInicial = async () => {
             document.getElementById("anio").value = anio;
             document.getElementById("hora_inicio").value = hora_inicio;
             document.getElementById("hora_fin").value = hora_fin;
-            
         }
     });
 };
 
-
-window.addEventListener("load", async () => {
-    await cargaInicial();
-});
-
-
-document.getElementById("agendarForm").addEventListener("submit", function (event) {
-    if (!validarFormulario()) {
-        event.preventDefault(); // Evita que el formulario se envíe si la validación falla
-    }
-});
-
+// Valida el formulario antes de enviarlo
 const validarFormulario = () => {
     const especialidadSeleccionada = cboEspecialidad.value;
     const subEspecialidadSeleccionada = cboSubEspecialidad.value;
@@ -206,9 +158,33 @@ const validarFormulario = () => {
         horarioSeleccionado === "0"
     ) {
         alert("Por favor, complete todos los campos antes de enviar el formulario.");
-        return false; // Evita que el formulario se envíe si hay campos no válidos
+        return false;
     }
 
-    // Si todos los campos tienen selecciones válidas, el formulario puede enviarse
     return true;
 };
+
+// Formatea la fecha en el formato deseado
+const formatearFecha = (fechaStr) => {
+    const fecha = new Date(`${fechaStr}T00:00:00`);
+    const opciones = {
+        weekday: "long",
+        day: "2-digit",
+        month: "2-digit",
+        year: "numeric",
+        timeZone: "America/Santiago"
+    };
+    return fecha.toLocaleDateString("es-ES", opciones);
+};
+
+// Inicializa la página y los eventos
+window.addEventListener("load", async () => {
+    await cargaInicial();
+});
+
+// Maneja el evento de envío del formulario
+document.getElementById("agendarForm").addEventListener("submit", function (event) {
+    if (!validarFormulario()) {
+        event.preventDefault();
+    }
+});

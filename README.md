@@ -4,6 +4,43 @@
 
 Este proyecto es una aplicación web dinámica desarrollada con Django en el backend y JavaScript en el frontend. La aplicación está diseñada para gestionar reservas, con integración de funcionalidades avanzadas como la sincronización con el calendario de Google. La aplicación permite a los usuarios realizar, editar y gestionar reservas con una interfaz amigable y funcional.
 
+## Funcionalidades
+
+- **Navegación por el Sitio Web**: El sitio web está organizado en dos aplicaciones principales, `armois` y `dashboard`, cada una con su propia funcionalidad y vistas.
+  
+- **Registro de Horas**: Los usuarios pueden registrar horas de atención y reservas en la aplicación.
+
+- **Selección Dinámica**: JavaScript actualiza dinámicamente las opciones disponibles en la interfaz según el profesional seleccionado.
+
+- **Almacenamiento en Base de Datos**: Toda la información relacionada con reservas, profesionales y horarios se almacena en una base de datos SQLite.
+
+- **Sincronización con Google Calendar**: Las reservas se sincronizan con Google Calendar para una gestión más eficiente.
+
+### Funcionalidades en la Aplicación Dashboard
+
+- **Login y Registro**: Gestión de usuarios con perfiles y privilegios separados.
+  
+- **Listado de Horarios**: Visualización de horarios y mensajes condicionales si no hay horarios disponibles.
+  
+- **CRUD de Reservas**: Crear, leer, actualizar y eliminar reservas con un modal.
+  
+- **Agregar Especialidades y Subespecialidades**: Permite agregar nuevas especialidades y subespecialidades mediante el renderizado de sólo 1 página utilizando componentes de javascript.
+  
+- **Agregar Profesionales**: Adición de nuevos profesionales y asignación de horarios.
+  
+- **Listado de Horarios Históricos**: Visualización de los horarios históricos registrados.
+  
+- **Logout**: Opción para cerrar sesión de manera segura.
+
+### Funcionalidades en la Aplicación Armois
+
+- **Página de Inicio**: Página principal con información de bienvenida y enlaces a otras secciones.
+  
+- **Registro de Atenciones**: Permite registrar y gestionar la información de atenciones.
+  
+- **Interfaz de Usuario**: Incluye estilos y scripts para mejorar la experiencia del usuario.
+
+
 ## Distinctividad and Complexity
 
 ### Distinctividad

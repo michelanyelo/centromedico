@@ -5,7 +5,7 @@ from django.utils import timezone
 
 
 class CustomUser(AbstractUser):
-    is_secretaria = models.BooleanField(default=False)
+    is_secretaria = models.BooleanField(default=True)
 
     def __str__(self):
         return self.username

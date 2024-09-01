@@ -139,7 +139,6 @@ const cargaInicial = async () => {
             document.getElementById("dia").value = dia;
             document.getElementById("mes").value = mes;
             document.getElementById("anio").value = anio;
-            alert(dia);
             
             const hora_inicio = cboHorario.options[cboHorario.selectedIndex].getAttribute("data-hora_inicio");
             const hora_fin = cboHorario.options[cboHorario.selectedIndex].getAttribute("data-hora_fin");

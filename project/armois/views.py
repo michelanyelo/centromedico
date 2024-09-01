@@ -1,7 +1,11 @@
+from django.contrib import messages
+from django.contrib.auth import authenticate
+from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth import login
 from django.shortcuts import render, redirect
 from django.http import HttpResponseRedirect, JsonResponse
 from django.urls import reverse
-from .models import Especialidad, Subespecialidad, Profesional, HorarioAtencion, Paciente, Reserva
+from .models import CustomUser, Especialidad, Subespecialidad, Profesional, HorarioAtencion, Paciente, Reserva
 from googlecalendar import google_calendar_class as gc
 from datetime import datetime
 from django.contrib.auth.decorators import login_required
@@ -105,13 +109,15 @@ def reservas_a_calendario(request):
         # Corregir el formato de la fecha y hora de inicio
         fecha_hora_inicio_str = request.POST.get('fecha_hora_inicio')
         fecha_hora_inicio_str = corregir_formato_fecha(fecha_hora_inicio_str)
-        fecha_hora_inicio = datetime.strptime(fecha_hora_inicio_str, '%Y-%m-%dT%H:%M:%S')
+        fecha_hora_inicio = datetime.strptime(
+            fecha_hora_inicio_str, '%Y-%m-%dT%H:%M:%S')
         hora_inicio = fecha_hora_inicio.strftime('%Y-%m-%dT%H:%M:%S')
 
         # Corregir el formato de la fecha y hora de finalización
         fecha_hora_final_str = request.POST.get('fecha_hora_final')
         fecha_hora_final_str = corregir_formato_fecha(fecha_hora_final_str)
-        fecha_hora_final = datetime.strptime(fecha_hora_final_str, '%Y-%m-%dT%H:%M:%S')
+        fecha_hora_final = datetime.strptime(
+            fecha_hora_final_str, '%Y-%m-%dT%H:%M:%S')
         hora_final = fecha_hora_final.strftime('%Y-%m-%dT%H:%M:%S')
 
         # Verificación rápida de las fechas
@@ -121,18 +127,20 @@ def reservas_a_calendario(request):
         especialidad_profesional = profesional.especialidad
         subespecialidad_profesional = profesional.subespecialidad
         correo_profesional = profesional.correo
-        
+
         summary = (f"{profesional.nombre} {profesional.apellido} "
-                   f"({subespecialidad_profesional}) \nAtención a: {nombre_paciente}"
-                   if subespecialidad_profesional
-                   else f"{profesional.nombre} {profesional.apellido}\n{especialidad_profesional} \nAtención a: {nombre_paciente}")
+                   f"({subespecialidad_profesional}) \nAtención a: {
+            nombre_paciente}"
+            if subespecialidad_profesional
+            else f"{profesional.nombre} {profesional.apellido}\n{especialidad_profesional} \nAtención a: {nombre_paciente}")
 
         timezone = "America/Santiago"
         attendees = [correo_profesional, correo_paciente]
 
         # Crear una instancia de GoogleCalendarManager y llamar a create_event
         calendar_manager = gc.GoogleCalendarManager()
-        calendar_manager.create_event(summary, fecha_hora_inicio.isoformat(), fecha_hora_final.isoformat(), timezone, attendees)
+        calendar_manager.create_event(summary, fecha_hora_inicio.isoformat(
+        ), fecha_hora_final.isoformat(), timezone, attendees)
 
         # Crear y guardar el nuevo paciente y la reserva
         nuevo_paciente = Paciente(
@@ -165,7 +173,6 @@ def reservas_a_calendario(request):
 
     else:
         return render(request, "armois/solicitar_datos_paciente.html/")
-
 
 
 def login_view(request):
@@ -204,3 +211,28 @@ def corregir_formato_fecha(fecha_str):
     # Reemplazar el guión entre la fecha y la hora
     fecha_str = fecha_str.replace('-T', 'T')
     return fecha_str
+
+
+# views.py
+
+
+def register_view(request):
+    if request.method == 'POST':
+        username = request.POST.get('username')
+        first_name = request.POST.get('firstName')
+        last_name = request.POST.get('lastName')
+        email = request.POST.get('email')
+        password1 = request.POST.get('password')
+        password2 = request.POST.get('rePassword')
+
+        if password1 != password2:
+            messages.error(request, "Las contraseñas no coinciden")
+            return render(request, 'armois/login_profesional.html')
+
+        user = CustomUser.objects.create_user(
+            username=username, first_name=first_name, last_name=last_name, email=email,  password=password1)
+        user.save()
+        login(request, user)
+        # Redirige a la página de inicio después del registro
+        return redirect('login')
+    return render(request, 'armois/login_profesional.html')

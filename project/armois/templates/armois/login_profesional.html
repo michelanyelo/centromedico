@@ -20,13 +20,19 @@
           </div>
         </div>
         <div class="blmd-continer">
+          <!-- @ Messages container -->
+          {% if messages %}
+            <div class="alert-container">
+              {% for message in messages %}
+                <div class="alert alert-{{ message.tags }}" role="alert">{{ message }}</div>
+              {% endfor %}
+            </div>
+          {% endif %}
+
           <!-- @ Login form container -->
           <form id="login-form" method="POST" action="{% url 'login' %}">
             {% csrf_token %}
             <h1 class="text-center">Inicia sesión</h1>
-            {% if message %}
-              <div class="alert alert-danger" role="alert">{{ message }}</div>
-            {% endif %}
             <div class="mb-3">
               <div class="form-floating">
                 <input type="text" name="username" autocomplete="off" id="usernameLogin" class="form-control" placeholder="Usuario" />
@@ -46,13 +52,31 @@
           </form>
 
           <!-- @ Register form container -->
-          <form action="post" class="clearfix form-hidden" id="Register-form">
+          <form method="POST" action="{% url 'register' %}" class="clearfix form-hidden" id="Register-form">
             {% csrf_token %}
             <h1 class="text-center">Registrarse</h1>
             <div class="mb-3">
               <div class="form-floating">
                 <input type="text" name="username" autocomplete="off" id="usernameReg" class="form-control" placeholder="Usuario" />
                 <label for="usernameReg">Usuario</label>
+              </div>
+            </div>
+            <div class="mb-3">
+              <div class="form-floating">
+                <input type="text" name="firstName" autocomplete="off" id="firstNameReg" class="form-control" placeholder="Nombre" />
+                <label for="firstNameReg">Nombre</label>
+              </div>
+            </div>
+            <div class="mb-3">
+              <div class="form-floating">
+                <input type="text" name="lastName" autocomplete="off" id="lastNameReg" class="form-control" placeholder="Apellido" />
+                <label for="lastNameReg">Apellido</label>
+              </div>
+            </div>
+            <div class="mb-3">
+              <div class="form-floating">
+                <input type="email" name="email" autocomplete="off" id="emailReg" class="form-control" placeholder="Correo electronico" />
+                <label for="emailReg">Email</label>
               </div>
             </div>
             <div class="mb-3">
@@ -68,7 +92,7 @@
               </div>
             </div>
             <div class="text-center">
-              <button type="button" class="btn btn-warning btn-lg w-100">Registrarse</button>
+              <button type="submit" class="btn btn-warning btn-lg w-100">Registrarse</button>
             </div>
             <br />
           </form>

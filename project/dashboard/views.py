@@ -101,7 +101,7 @@ def listar_reservas(request):
 
 @login_required
 def crud_reservas(request):
-    reservas = Reserva.objects.all()
+    reservas = Reserva.objects.filter(is_active=True)
     return render(request, 'dashboard/dashboard.html', {'reservas': reservas})
 
 

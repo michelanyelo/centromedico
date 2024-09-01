@@ -96,7 +96,7 @@ const listarHorariosDisponibles = async (profesionalId) => {
         let opciones = data.message === "Success"
             ? data.horarios.map(horario => {
                 const fechaFormateada = formatearFecha(horario.fecha);
-                return `<option value="${horario.id}" data-fecha="${fechaFormateada}/${horario.hora_inicio}/${horario.hora_fin}">${fechaFormateada} : ${horario.hora_inicio} - ${horario.hora_fin}</option>`;
+                return `<option value="${horario.id}" data-fecha="${fechaFormateada}" data-hora_inicio="${horario.hora_inicio}" data-hora_fin="${horario.hora_fin}">${fechaFormateada} : ${horario.hora_inicio} - ${horario.hora_fin}</option>`;
             }).join("")
             : '<option value="0">No hay horarios disponibles</option>';
 
@@ -109,6 +109,7 @@ const listarHorariosDisponibles = async (profesionalId) => {
         console.error("Error al obtener los horarios disponibles:", error);
     }
 };
+
 
 // Funciones de manipulación de UI
 
@@ -134,14 +135,19 @@ const cargaInicial = async () => {
             cboHorario.selectedIndex = 0;
         } else {
             const fechaSeleccionada = cboHorario.options[cboHorario.selectedIndex].getAttribute("data-fecha");
-            const [dia, mes, anio, hora_inicio, hora_fin] = fechaSeleccionada.split('/');
+            const [dia, mes, anio] = fechaSeleccionada.split('/');
             document.getElementById("dia").value = dia;
             document.getElementById("mes").value = mes;
             document.getElementById("anio").value = anio;
+            alert(dia);
+            
+            const hora_inicio = cboHorario.options[cboHorario.selectedIndex].getAttribute("data-hora_inicio");
+            const hora_fin = cboHorario.options[cboHorario.selectedIndex].getAttribute("data-hora_fin");
             document.getElementById("hora_inicio").value = hora_inicio;
             document.getElementById("hora_fin").value = hora_fin;
         }
     });
+    
 };
 
 // Valida el formulario antes de enviarlo
@@ -165,10 +171,10 @@ const validarFormulario = () => {
 };
 
 // Formatea la fecha en el formato deseado
+// Formatea la fecha en el formato deseado
 const formatearFecha = (fechaStr) => {
     const fecha = new Date(`${fechaStr}T00:00:00`);
     const opciones = {
-        weekday: "long",
         day: "2-digit",
         month: "2-digit",
         year: "numeric",
@@ -176,6 +182,7 @@ const formatearFecha = (fechaStr) => {
     };
     return fecha.toLocaleDateString("es-ES", opciones);
 };
+
 
 // Inicializa la página y los eventos
 window.addEventListener("load", async () => {

@@ -101,43 +101,40 @@ def reservas_a_calendario(request):
         # Obtener los datos del profesional
         profesional_id = request.POST.get('id_profesional')
         profesional = Profesional.objects.get(id=int(profesional_id))
+
+        # Corregir el formato de la fecha y hora de inicio
         fecha_hora_inicio_str = request.POST.get('fecha_hora_inicio')
-        fecha_hora_inicio_str = fecha_hora_inicio_str.replace('-T', 'T')
-        fecha_hora_inicio = datetime.strptime(
-            fecha_hora_inicio_str, '%Y-%m-%dT%H:%M:%S')
+        fecha_hora_inicio_str = corregir_formato_fecha(fecha_hora_inicio_str)
+        fecha_hora_inicio = datetime.strptime(fecha_hora_inicio_str, '%Y-%m-%dT%H:%M:%S')
         hora_inicio = fecha_hora_inicio.strftime('%Y-%m-%dT%H:%M:%S')
 
+        # Corregir el formato de la fecha y hora de finalización
         fecha_hora_final_str = request.POST.get('fecha_hora_final')
-        fecha_hora_final_str = fecha_hora_final_str.replace('-T', 'T')
-        fecha_hora_final = datetime.strptime(
-            fecha_hora_final_str, '%Y-%m-%dT%H:%M:%S')
+        fecha_hora_final_str = corregir_formato_fecha(fecha_hora_final_str)
+        fecha_hora_final = datetime.strptime(fecha_hora_final_str, '%Y-%m-%dT%H:%M:%S')
         hora_final = fecha_hora_final.strftime('%Y-%m-%dT%H:%M:%S')
 
+        # Verificación rápida de las fechas
+        print(f"Inicio: {fecha_hora_inicio}, Fin: {fecha_hora_final}")
+
         # Lógica para agregar el evento al calendario con los datos del paciente y profesional
-        especialidad_profesional = Profesional.objects.get(
-            id=profesional_id).especialidad
-        subespecialidad_profesional = Profesional.objects.get(
-            id=profesional_id).subespecialidad
-        correo_profesional = Profesional.objects.get(id=profesional_id).correo
-        if subespecialidad_profesional is not None:
-            summary = f"{profesional.nombre} {profesional.apellido} ({subespecialidad_profesional}) \nAtención a: {
-                nombre_paciente}"
-        else:
-            summary = f"{profesional.nombre} {profesional.apellido}\n{
-                especialidad_profesional} \nAtención a: {nombre_paciente}"
+        especialidad_profesional = profesional.especialidad
+        subespecialidad_profesional = profesional.subespecialidad
+        correo_profesional = profesional.correo
+        
+        summary = (f"{profesional.nombre} {profesional.apellido} "
+                   f"({subespecialidad_profesional}) \nAtención a: {nombre_paciente}"
+                   if subespecialidad_profesional
+                   else f"{profesional.nombre} {profesional.apellido}\n{especialidad_profesional} \nAtención a: {nombre_paciente}")
+
         timezone = "America/Santiago"
         attendees = [correo_profesional, correo_paciente]
 
         # Crear una instancia de GoogleCalendarManager y llamar a create_event
-
         calendar_manager = gc.GoogleCalendarManager()
-        calendar_manager.create_event(str(summary),
-                                      str(hora_inicio),
-                                      str(hora_final),
-                                      timezone,
-                                      attendees)
+        calendar_manager.create_event(summary, fecha_hora_inicio.isoformat(), fecha_hora_final.isoformat(), timezone, attendees)
 
-        # Crear y guardar el nuevo paciente
+        # Crear y guardar el nuevo paciente y la reserva
         nuevo_paciente = Paciente(
             nombre=nombre_paciente,
             correo=correo_paciente,
@@ -148,7 +145,6 @@ def reservas_a_calendario(request):
         nuevo_paciente.save()
 
         horario_atencion = HorarioAtencion.objects.get(id=int(horario_id))
-        # Crear y guardar la reserva
         nueva_reserva = Reserva(
             horario=horario_atencion,
             paciente=nuevo_paciente,
@@ -168,8 +164,8 @@ def reservas_a_calendario(request):
         return redirect('reservas')
 
     else:
-        # Si no es un método POST, redirigir a la página de reserva
         return render(request, "armois/solicitar_datos_paciente.html/")
+
 
 
 def login_view(request):
@@ -197,3 +193,14 @@ def logout_view(request):
 @login_required
 def profile_view(request):
     return render(request, 'dashboard/profile_profesional.html', {'user': request.user})
+
+
+def corregir_formato_fecha(fecha_str):
+    # Eliminar el nombre del día de la semana
+    partes = fecha_str.split(',')
+    if len(partes) == 2:
+        fecha_str = partes[1].strip()
+
+    # Reemplazar el guión entre la fecha y la hora
+    fecha_str = fecha_str.replace('-T', 'T')
+    return fecha_str

@@ -121,7 +121,7 @@ El proyecto está dividido en las siguientes aplicaciones:
 
 ## Información Adicional
 
-- **Sincronización con Google Calendar**: La aplicación utiliza la API de Google Calendar para sincronizar las reservas. Asegúrate de configurar los archivos `credentials.json` y `token.json` correctamente en la carpeta `googlecalendar/`.
+- **Sincronización con Google Calendar**: La aplicación utiliza la API de Google Calendar para sincronizar las reservas. Asegúrate de renombrar el archivo client_secret a `credentials.json` y configurar `token.json` correctamente en la carpeta `googlecalendar/`.
 
 - **Responsive Design**: La interfaz ha sido diseñada para ser compatible con dispositivos móviles mediante el uso de CSS y media queries.
 

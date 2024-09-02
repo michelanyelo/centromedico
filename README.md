@@ -6,39 +6,42 @@ Este proyecto es una aplicación web dinámica desarrollada con Django en el bac
 
 ## Funcionalidades
 
-- **Navegación por el Sitio Web**: El sitio web está organizado en dos aplicaciones principales, `armois` y `dashboard`, cada una con su propia funcionalidad y vistas.
-  
-- **Registro de Horas**: Los usuarios pueden registrar horas de atención y reservas en la aplicación.
+- **Navegación por el Sitio Web**: La aplicación está organizada en dos módulos principales, `armois` y `dashboard`. Cada uno cuenta con sus propias vistas y funcionalidades, facilitando una navegación clara y eficiente.
 
-- **Selección Dinámica**: JavaScript actualiza dinámicamente las opciones disponibles en la interfaz según el profesional seleccionado.
+- **Registro de Horas**: Los usuarios pueden registrar horas de atención y reservas directamente en la aplicación. Esto permite a los profesionales médicos gestionar sus horarios de manera eficiente.
 
-- **Almacenamiento en Base de Datos**: Toda la información relacionada con reservas, profesionales y horarios se almacena en una base de datos SQLite.
+- **Selección Dinámica de Opciones**: Utilizando JavaScript, la aplicación actualiza dinámicamente las opciones disponibles en la interfaz según las selecciones del usuario. Por ejemplo, al seleccionar un profesional, los horarios disponibles se actualizan automáticamente.
 
-- **Sincronización con Google Calendar**: Las reservas se sincronizan con Google Calendar para una gestión más eficiente.
+- **Almacenamiento en Base de Datos**: Toda la información relacionada con reservas, profesionales y horarios se almacena en una base de datos SQLite, garantizando que los datos se mantengan seguros y accesibles.
+
+- **Sincronización con Google Calendar**: La aplicación se integra con la API de Google Calendar para sincronizar las reservas directamente con el calendario de los usuarios. Esta funcionalidad asegura que los usuarios reciban notificaciones y recordatorios de sus citas.
 
 ### Funcionalidades en la Aplicación Dashboard
 
-- **Login y Registro**: Gestión de usuarios con perfiles y privilegios separados.
-  
-- **Listado de Horarios**: Visualización de horarios y mensajes condicionales si no hay horarios disponibles.
-  
-- **CRUD de Reservas**: Crear, leer, actualizar y eliminar reservas con un modal.
-  
-- **Agregar Especialidades y Subespecialidades**: Permite agregar nuevas especialidades y subespecialidades mediante el renderizado de sólo 1 página utilizando componentes de javascript.
-  
-- **Agregar Profesionales**: Adición de nuevos profesionales y asignación de horarios.
-  
-- **Listado de Horarios Históricos**: Visualización de los horarios históricos registrados.
-  
-- **Logout**: Opción para cerrar sesión de manera segura.
+- **Login y Registro**: Gestión de usuarios con perfiles separados, cada uno con privilegios específicos. Los usuarios pueden iniciar sesión, registrarse y acceder a funcionalidades personalizadas según su rol.
+
+- **Listado de Horarios**: Los usuarios pueden ver una lista de horarios disponibles, con mensajes condicionales que indican la falta de disponibilidad de citas.
+
+- **CRUD de Reservas**: La aplicación permite a los usuarios crear, leer, actualizar y eliminar reservas mediante un modal interactivo, facilitando la gestión de citas de manera eficiente.
+
+- **Agregar Especialidades y Subespecialidades**: Los administradores pueden agregar nuevas especialidades y subespecialidades desde una sola página, utilizando componentes JavaScript que facilitan la entrada de datos.
+
+- **Agregar Profesionales**: Funcionalidad para añadir nuevos profesionales y asignarles horarios de atención específicos, lo que permite una gestión centralizada del personal médico.
+
+- **Listado de Horarios Históricos**: Los usuarios pueden visualizar un historial de los horarios registrados, lo que permite llevar un control detallado de las actividades pasadas.
+
+- **Logout**: Opción para cerrar sesión de manera segura, garantizando que la información del usuario esté protegida.
 
 ### Funcionalidades en la Aplicación Armois
 
-- **Página de Inicio**: Página principal con información de bienvenida y enlaces a otras secciones.
-  
-- **Registro de Atenciones**: Permite registrar y gestionar la información de atenciones.
-  
-- **Interfaz de Usuario**: Incluye estilos y scripts para mejorar la experiencia del usuario.
+- **Página de Inicio**: La página principal ofrece una visión general de los servicios disponibles y proporciona enlaces a las secciones más importantes del sitio.
+
+- **Registro de Atenciones**: Los usuarios pueden registrar y gestionar la información de atenciones médicas, facilitando la administración de citas y tratamientos.
+
+- **Disponibilidad Dinámica de Horarios**: Los horarios se gestionan de manera dinámica. Cuando un paciente toma una cita, el horario correspondiente se marca como ocupado. Sin embargo, si el gestor de la aplicación marca la cita como finalizada, el horario vuelve a estar disponible para otros pacientes. Esto permite una gestión eficiente y automatizada de la disponibilidad de horarios.
+
+- **Interfaz de Usuario Mejorada**: La aplicación incluye estilos personalizados y scripts para mejorar la experiencia del usuario, haciendo que la navegación sea intuitiva y visualmente atractiva.
+
 
 
 ## Distinctividad and Complexity

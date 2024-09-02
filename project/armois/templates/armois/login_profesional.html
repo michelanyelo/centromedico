@@ -22,10 +22,11 @@
         <div class="blmd-continer">
           <!-- @ Messages container -->
           {% if messages %}
-            <div class="alert-container">
+            <div class="alert alert-danger alert-dismissible fade show" role="alert">
               {% for message in messages %}
-                <div class="alert alert-{{ message.tags }}" role="alert">{{ message }}</div>
+                {{ message }}
               {% endfor %}
+              <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
             </div>
           {% endif %}
 

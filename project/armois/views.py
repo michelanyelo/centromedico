@@ -213,9 +213,6 @@ def corregir_formato_fecha(fecha_str):
     return fecha_str
 
 
-# views.py
-
-
 def register_view(request):
     if request.method == 'POST':
         username = request.POST.get('username')
@@ -225,14 +222,22 @@ def register_view(request):
         password1 = request.POST.get('password')
         password2 = request.POST.get('rePassword')
 
+        # Verifica si el username ya existe
+        if CustomUser.objects.filter(username=username).exists():
+            messages.error(request, "El nombre de usuario ya existe")
+            return render(request, 'armois/login_profesional.html')
+
         if password1 != password2:
             messages.error(request, "Las contraseñas no coinciden")
             return render(request, 'armois/login_profesional.html')
 
+        # Crea el nuevo usuario
         user = CustomUser.objects.create_user(
-            username=username, first_name=first_name, last_name=last_name, email=email,  password=password1)
+            username=username, first_name=first_name, last_name=last_name, email=email, password=password1
+        )
         user.save()
         login(request, user)
         # Redirige a la página de inicio después del registro
         return redirect('login')
+    
     return render(request, 'armois/login_profesional.html')

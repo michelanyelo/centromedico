@@ -130,7 +130,7 @@ El proyecto está dividido en las siguientes aplicaciones:
 
 ## Video de Demostración
 
-Puedes ver una demostración del proyecto en acción en este [enlace a YouTube](https://www.youtube.com). El video muestra cómo se gestionan las reservas y cómo la aplicación interactúa con Google Calendar.
+Puedes ver una demostración del proyecto en acción en este [enlace a YouTube](https://youtu.be/fYwRUzCFWL0). El video muestra cómo se gestionan las reservas y cómo la aplicación interactúa con Google Calendar.
 
 ## Licencia
 

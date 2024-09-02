@@ -12,7 +12,7 @@
         {% csrf_token %}
         <div class="mb-3">
           <label for="specialty_name" class="form-label">Especialidad:</label>
-          <input type="text" id="specialty_name" name="specialty_name" class="form-control" />
+          <input type="text" id="specialty_name" name="specialty_name" autocomplete="off" class="form-control" />
         </div>
         <div class="mb-3">
           <label for="specialty_description" class="form-label">Descripción:</label>
@@ -32,7 +32,7 @@
         </div>
         <div class="mb-3">
           <label for="sub_name" class="form-label">Subespecialidad:</label>
-          <input type="text" id="sub_name" name="sub_name" class="form-control" />
+          <input type="text" id="sub_name" name="sub_name" autocomplete="off" class="form-control" />
         </div>
         <button type="submit" class="btn btn-primary">Agregar Subespecialidad</button>
       </form>
